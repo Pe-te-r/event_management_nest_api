@@ -26,7 +26,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): ApiResponse<Users> {
     return this.usersService.findOne(id);
   }
 

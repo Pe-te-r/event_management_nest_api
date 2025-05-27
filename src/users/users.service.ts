@@ -12,9 +12,6 @@ export interface Users {
   password: string;
   phone: string;
 }
-function generateJson(data: Users | Users[]) {
-  return JSON.stringify(data); // 2 spaces for pretty-printing
-}
 
 @Injectable()
 export class UsersService {
@@ -49,8 +46,6 @@ export class UsersService {
   }
 
   findAll(): ApiResponse<Users[]> {
-    const json = generateJson(this.users);
-    console.log(json);
     return {
       status: 'success',
       message: 'all users retrived',
@@ -58,7 +53,7 @@ export class UsersService {
     };
   }
 
-  findOne(id: string) {
+  findOne(id: string): ApiResponse<Users> {
     const foundUser = this.users.find((user) => user.id === id);
     if (!foundUser) {
       return {
@@ -69,7 +64,7 @@ export class UsersService {
     return {
       status: 'success',
       message: `User with id ${id} retrived`,
-      data: generateJson(foundUser),
+      data: foundUser,
     };
   }
 
