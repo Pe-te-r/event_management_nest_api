@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+// import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiResponse } from 'src/responseType';
@@ -33,23 +33,38 @@ export class UsersService {
       password: '1234',
     },
   ];
-  create(createUserDto: CreateUserDto): ApiResponse<undefined> {
-    const newUser: Users = {
-      id: uuidv4(),
-      ...createUserDto,
-    };
-    this.users.push(newUser);
-    return {
-      status: 'success',
-      message: `New user added with uuid ${newUser.id}`,
-    };
-  }
+  // async create(createUserDto: CreateUserDto): Promise<ApiResponse<undefined>> {
+  //   // await user.insertUser(createUserDto);
+  //   const newUser: Users = {
+  //     id: uuidv4(),
+  //     ...createUserDto,
+  //   };
+  //   this.users.push(newUser);
+  //   return {
+  //     status: 'success',
+  //     message: `New user added with uuid ${newUser.id}`,
+  //   };
+  // }
 
-  findAll(): ApiResponse<Users[]> {
+  findAll(limit: number, email?: string): ApiResponse<Users[] | Users> {
+    if (email) {
+      const user = this.users.find((user) => user.email === email);
+      if (!user) {
+        return {
+          status: 'error',
+          message: `This email ${email} is not found`,
+        };
+      }
+      return {
+        status: 'success',
+        message: 'all users retrived',
+        data: user,
+      };
+    }
     return {
       status: 'success',
       message: 'all users retrived',
-      data: this.users,
+      data: this.users.slice(0, limit),
     };
   }
 

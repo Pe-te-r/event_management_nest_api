@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { Users, UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,16 +18,27 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    console.log(createUserDto);
+    // return this.usersService.create(createUserDto);
   }
-
+  // this about getting all users
   @Get()
-  findAll(): ApiResponse<Users[]> {
-    return this.usersService.findAll();
+  findAll(
+    @Query() param?: { email: string; limit: number },
+  ): ApiResponse<Users[] | Users> {
+    const limit = param?.limit ?? 10;
+    if (param?.email) {
+      return this.usersService.findAll(Number(limit), param?.email);
+    }
+    return this.usersService.findAll(Number(limit));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): ApiResponse<Users> {
+  findOne(
+    @Param('id') id: string,
+    @Query('email') email?: string,
+  ): ApiResponse<Users> {
+    console.log(email);
     return this.usersService.findOne(id);
   }
 
