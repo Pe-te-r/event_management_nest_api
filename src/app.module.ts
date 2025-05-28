@@ -6,15 +6,20 @@ import { FeedbackModule } from './feedback/feedback.module';
 import { PaymentsModule } from './payments/payments.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { DatabaseModule } from './database/database.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
+    DatabaseModule,
     UsersModule,
     EventsModule,
     EventRegistrationsModule,
     FeedbackModule,
     PaymentsModule,
-    DatabaseModule,
   ],
   controllers: [],
   providers: [],

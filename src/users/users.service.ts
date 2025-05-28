@@ -3,6 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { ApiResponse } from 'src/responseType';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
 
 export interface Users {
   id: string;
@@ -15,6 +18,9 @@ export interface Users {
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
   private users: Users[] = [
     {
       id: uuidv4(),

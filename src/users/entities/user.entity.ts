@@ -1,37 +1,28 @@
-// import db from 'src/Database/index'; // Assuming your Database class is exported from database.ts
-// import { Users } from '../users.service';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-// interface ReturnType extends Users {
-//   role: 'admin' | 'user';
-// }
-// export class User {
-//   constructor() {}
-//   async insertUser(user: Users): Promise<ReturnType> {
-//     try {
-//       const query = `
-//         INSERT INTO users
-//         (id, first_name, last_name, email, phone, role)
-//         VALUES ($1, $2, $3, $4, $5, $6)
-//         RETURNING *`;
+  @Column()
+  first_name: string;
 
-//       const params = [
-//         user.id,
-//         user.firstName,
-//         user.lastName,
-//         user.email,
-//         user.phone,
-//         'user',
-//       ];
+  @Column({ nullable: true })
+  last_name: string;
 
-//       const result = await db.executeQuery(query, params);
-//       console.table(result.rows);
-//       return result.rows;
-//     } catch (error) {
-//       console.error('Failed to insert user:', error);
-//       throw error;
-//     }
-//   }
-// }
+  @Column({ unique: true })
+  email: string;
 
-// const user = new User();
-// export default user;
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createAt: Date;
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updateAt: Date;
+}
