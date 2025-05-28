@@ -1,5 +1,5 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+@Entity()
 export class EventRegistration {
   @PrimaryGeneratedColumn('uuid')
   registration_id: string;
@@ -13,6 +13,6 @@ export class EventRegistration {
   @Column()
   payment_status: string;
 
-  @Column({type:'number',precision:3,scale:2})
+  @Column({ type:'decimal',precision:3,scale:2})
   payment_amount: number;
 }

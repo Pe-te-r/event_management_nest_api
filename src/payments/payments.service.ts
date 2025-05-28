@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Payment } from './entities/payment.entity';
 
 @Injectable()
 export class PaymentsService {
+  constructor(
+    @InjectRepository(Payment) private paymentRepository: Repository<Payment>
+  ){}
   create(createPaymentDto: CreatePaymentDto) {
     console.log(createPaymentDto);
     return 'This action adds a new payment';

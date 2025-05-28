@@ -1,10 +1,10 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+@Entity()
 export class Feedback {
   @PrimaryGeneratedColumn('uuid')
   feedback_id: string;
   
-  @Column({ type: 'number' })
+  @Column()
   rating: number;
 
   @Column('text')

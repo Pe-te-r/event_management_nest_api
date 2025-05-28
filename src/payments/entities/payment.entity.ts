@@ -1,10 +1,10 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+@Entity()
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
   payment_id: string;
 
-  @Column({type:'number', precision:3,scale:2})
+  @Column({type:'decimal',precision:3,scale:2})
   amount: number;
 
   @Column()

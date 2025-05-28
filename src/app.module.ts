@@ -1,3 +1,4 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { EventsModule } from './events/events.module';
@@ -6,7 +7,6 @@ import { FeedbackModule } from './feedback/feedback.module';
 import { PaymentsModule } from './payments/payments.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { DatabaseModule } from './database/database.module';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
