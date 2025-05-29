@@ -6,12 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 
-@Controller('feedback')
+@Controller('feedbacks')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
@@ -21,8 +22,8 @@ export class FeedbackController {
   }
 
   @Get()
-  findAll() {
-    return this.feedbackService.findAll();
+  findAll(@Query('detailed') detailed:boolean) {
+    return this.feedbackService.findAll(detailed);
   }
 
   @Get(':id')

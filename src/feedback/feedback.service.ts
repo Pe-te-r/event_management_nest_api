@@ -1,15 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Feedback } from './entities/feedback.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FeedbackService {
+  constructor(
+    @InjectRepository(Feedback) private feedbackRepository:Repository<Feedback>
+  ){}
   create(createFeedbackDto: CreateFeedbackDto) {
     return 'This action adds a new feedback';
   }
 
-  findAll() {
-    return `This action returns all feedback`;
+  async findAll(detailed:boolean=false) {
+    if (detailed) {
+          const all_registrations = await this.feedbackRepository.find({
+            relations: {
+              owner: true,
+              event:true,
+            }
+          })
+      if (all_registrations.length == 0) {
+        throw new NotFoundException('no feedback found');
+      }
+      
+      return {
+        status: 'success',
+        message: 'feedback details found',
+        data: all_registrations
+        }
+    }
+        const all_registrations = await this.feedbackRepository.find()
+        if (all_registrations.length == 0) {
+          throw new NotFoundException('no feedback found');
+        }
+        return {
+          status: 'success',
+          message: 'feedback details found',
+          data: all_registrations      
+        }
   }
 
   findOne(id: number) {

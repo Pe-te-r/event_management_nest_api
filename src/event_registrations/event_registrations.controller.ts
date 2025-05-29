@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { EventRegistrationsService } from './event_registrations.service';
 import { CreateEventRegistrationDto } from './dto/create-event_registration.dto';
@@ -23,8 +24,8 @@ export class EventRegistrationsController {
   }
 
   @Get()
-  findAll() {
-    return this.eventRegistrationsService.findAll();
+  findAll(@Query('detailed') detailed:boolean) {
+    return this.eventRegistrationsService.findAll(detailed);
   }
 
   @Get(':id')

@@ -1,3 +1,6 @@
 @url = http://localhost:3000
 ###
 GET {{url}}/event_registrations
+
+###
+GET {{url}}/event_registrations?detailed=true

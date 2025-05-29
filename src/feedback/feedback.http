@@ -1,0 +1,6 @@
+@url=http://localhost:3000
+
+###
+GET {{url}}/feedbacks?detailed=true
+###
+GET {{url}}/feedbacks

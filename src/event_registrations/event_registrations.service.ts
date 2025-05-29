@@ -15,9 +15,23 @@ export class EventRegistrationsService {
     return 'This action adds a new eventRegistration';
   }
 
-  async findAll(): Promise<ApiResponse<EventRegistration[] | null>> {
+  async findAll(detailed:boolean=false): Promise<ApiResponse<EventRegistration[] | null>> {
+    if (detailed) {
+      const all_registrations = await this.eventRegisterRepository.find({
+        relations: {
+          paidUser: true,
+          payments: true,
+          
+        }
+      })
+      return {
+        status: 'success',
+        message: 'register details found',
+        data: all_registrations
+      }
+      
+    }
     const all_registrations = await this.eventRegisterRepository.find()
-    console.log(all_registrations)
     if (all_registrations.length == 0) {
       throw new NotFoundException('no registration found');
     }
