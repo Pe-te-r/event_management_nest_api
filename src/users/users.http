@@ -22,9 +22,9 @@ GET {{url}}/users?email=alice@example.com
 
 ## for one user
 ###
-GET {{url}}/users/0bff9b31-ac1d-479f-a345-3656c82f9640
+GET {{url}}/users/ec64b9ef-fc10-4839-a36b-5eda25417d43?detailed=true
 
 ###detailed user
-GET {{url}}/users/0bff9b31-ac1d-479f-a345-3656c82f9640?detailed=true
+GET {{url}}/users/bb7c184e-fcf6-4ec6-b98e-664c6c79c2be?detailed=true
 
 

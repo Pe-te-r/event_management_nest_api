@@ -1,5 +1,6 @@
 import { RoleEnum } from 'src/common/types/enums';
 import { EventRegistration } from 'src/event_registrations/entities/event_registration.entity';
+import { Event } from 'src/events/entities/event.entity';
 import { Feedback } from 'src/feedback/entities/feedback.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -38,6 +39,9 @@ export class User {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updateAt: Date;
+
+  @OneToMany(() => Event, (event) => event.createdBy)
+  createdEvents: Event[];
 
   // feedback 1->M
   @OneToMany(()=> Feedback,(feedback)=>feedback.owner)

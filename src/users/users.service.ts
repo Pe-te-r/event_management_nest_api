@@ -58,7 +58,8 @@ export class UsersService {
         relations: {
           feedback: true,
           payments: true,
-          registeredEvents:true
+          registeredEvents: true,
+          createdEvents:true
         }
       })
       return {

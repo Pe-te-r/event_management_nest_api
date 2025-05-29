@@ -1,0 +1,20 @@
+@url = http://localhost:3000
+
+### all events
+GET {{url}}/events
+
+### one event
+GET {{url}}/events/90ad20ed-70db-4009-9e50-1e9ebd680642
+
+
+### creat an event
+POST {{url}}/events
+Content-Type: application/json
+
+{
+  "event_date":"2025-08-14",
+  "event_name":"Teach2Give Cohort",
+  "event_location":"Kirinyaga",
+  "createdById":"ec64b9ef-fc10-4839-a36b-5eda25417d43",
+  "event_description":"this event is about getting trained on web development concepts"
+}

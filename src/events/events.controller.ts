@@ -22,12 +22,14 @@ export class EventsController {
 
   @Get()
   findAll() {
+    console.log('one')
     return this.eventsService.findAll();
   }
-
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.eventsService.findOne(+id);
+    console.log('one')
+    return this.eventsService.findOne(id);
   }
 
   @Patch(':id')

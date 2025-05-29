@@ -1,6 +1,7 @@
 import { EventRegistration } from "src/event_registrations/entities/event_registration.entity";
 import { Feedback } from "src/feedback/entities/feedback.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name:'events'})
 export class Event {
@@ -11,7 +12,7 @@ export class Event {
   event_name: string;
 
   @Column('date')
-  event_date: string;
+  event_date: Date;
 
   @Column()
   event_location: string;
@@ -31,12 +32,15 @@ export class Event {
       onUpdate: 'CURRENT_TIMESTAMP',
     })
     updateAt: Date;
+  // one event created by a user
+  @ManyToOne(() => User, (user) => user.createdEvents,{cascade:true})
+  createdBy: User;
   
   // one event with many feedbacks
-  @OneToMany(() => Feedback, (feedback) => feedback.event)
+  @OneToMany(() => Feedback, (feedback) => feedback.event,{cascade:true})
   feedbacks: Feedback[];
 
   // one event with multiple registration
-  @OneToMany(() => EventRegistration, (event_registration) => event_registration.registeredEvent)
+  @OneToMany(() => EventRegistration, (event_registration) => event_registration.registeredEvent,{cascade:true})
   registrations: EventRegistration[]
 }
