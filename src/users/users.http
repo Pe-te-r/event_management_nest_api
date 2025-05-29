@@ -1,4 +1,30 @@
 @url = http://localhost:3000
+##createUser
+###
+POST {{url}}/users
+Content-Type: application/json
 
+{
+  "first_name":"shakirah",
+  "last_name":"muthoni",
+  "email":"shakirah8526@duck.com",
+  "phone":"0712544200",
+  "role":"admin",
+  "password":"shakirah@8526"
+}
+
+
+## for all users
 ###
 GET {{url}}/users
+### search email
+GET {{url}}/users?email=alice@example.com
+
+## for one user
+###
+GET {{url}}/users/0bff9b31-ac1d-479f-a345-3656c82f9640
+
+###detailed user
+GET {{url}}/users/0bff9b31-ac1d-479f-a345-3656c82f9640?detailed=true
+
+

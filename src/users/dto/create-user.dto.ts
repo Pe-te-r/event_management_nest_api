@@ -9,12 +9,17 @@ import {
 export class CreateUserDto {
   @IsEmail()
   email: string;
+  
   @IsString()
-  firstName: string;
+  first_name: string;
+  
   @IsString()
-  lastName: string;
+  @IsOptional()
+  last_name: string;
+  
   @IsNotEmpty()
   password: string;
+  
   @IsOptional()
   @IsNumberString()
   phone: string;

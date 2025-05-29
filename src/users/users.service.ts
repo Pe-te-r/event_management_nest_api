@@ -6,55 +6,31 @@ import { ApiResponse } from 'src/responseType';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
 
-export interface Users {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  phone: string;
-}
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
-  private users: Users[] = [
-    {
-      id: uuidv4(),
-      email: 'phantom8526@duck.com',
-      firstName: 'phantom',
-      lastName: 'mburu',
-      phone: '0748200233',
-      password: '1234',
-    },
-    {
-      id: uuidv4(),
-      email: 'peter@gmail.com',
-      firstName: 'peter',
-      lastName: 'wahu',
-      phone: '0768543269',
-      password: '1234',
-    },
-  ];
-  // async create(createUserDto: CreateUserDto): Promise<ApiResponse<undefined>> {
-  //   // await user.insertUser(createUserDto);
-  //   const newUser: Users = {
-  //     id: uuidv4(),
-  //     ...createUserDto,
-  //   };
-  //   this.users.push(newUser);
-  //   return {
-  //     status: 'success',
-  //     message: `New user added with uuid ${newUser.id}`,
-  //   };
-  // }
+  
+  async create(createUserDto: CreateUserDto): Promise<ApiResponse<undefined>> {
+    // await user.insertUser(createUserDto);
+    const newUser = this.userRepository.create(createUserDto)
+    const savedUser = await this.userRepository.save(newUser)
 
-  findAll(limit: number, email?: string): ApiResponse<Users[] | Users> {
-    if (email) {
-      const user = this.users.find((user) => user.email === email);
+    return {
+      status: 'success',
+      message: `New user added with uuid ${newUser.id}`,
+    };
+  }
+
+ async findAll(limit: number, email?: string): Promise<ApiResponse<User[] | User> >{
+   if (email) {
+     const user = await this.userRepository.findOne({
+       where: {email:email}
+      })
       if (!user) {
         return {
           status: 'error',
@@ -67,15 +43,31 @@ export class UsersService {
         data: user,
       };
     }
+    const user = await this.userRepository.find()
     return {
       status: 'success',
       message: 'all users retrived',
-      data: this.users.slice(0, limit),
+      data: user,
     };
   }
 
-  findOne(id: string): ApiResponse<Users> {
-    const foundUser = this.users.find((user) => user.id === id);
+  async findOne(id: string,detailed: boolean=false): Promise<ApiResponse<User | null>> {
+    if (detailed) {
+      const foundUser = await this.userRepository.findOne({
+        where: { id: id },
+        relations: {
+          feedback: true,
+          payments: true,
+          registeredEvents:true
+        }
+      })
+      return {
+        status: 'success',
+        message: `User with id ${id} retrived`,
+        data: foundUser,
+      };
+    }
+    const foundUser =await this.userRepository.findOne({ where: { id: id } })
     if (!foundUser) {
       return {
         status: 'error',
@@ -90,7 +82,7 @@ export class UsersService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const foundUser = this.users.find((user) => user.id === id);
+    const foundUser = this.userRepository.findOne({where:{id:id}});
     if (!foundUser) {
       return {
         status: 'error',
@@ -105,7 +97,7 @@ export class UsersService {
   }
 
   remove(id: string) {
-    const foundUser = this.users.find((user) => user.id === id);
+    const foundUser = this.userRepository.findOne({where:{id:id}});
     if (!foundUser) {
       return {
         status: 'error',

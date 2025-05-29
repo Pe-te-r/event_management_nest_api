@@ -8,10 +8,11 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { Users, UsersService } from './users.service';
+import {  UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/responseType';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -19,31 +20,31 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     console.log(createUserDto);
-    // return this.usersService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
+  
   // this about getting all users
   @Get()
-  findAll(
+  async findAll(
     @Query() param?: { email: string; limit: number },
-  ): ApiResponse<Users[] | Users> {
+  ): Promise<ApiResponse<User[] | User>> {
     const limit = param?.limit ?? 10;
     if (param?.email) {
-      return this.usersService.findAll(Number(limit), param?.email);
+      return await this.usersService.findAll(Number(limit), param?.email);
     }
-    return this.usersService.findAll(Number(limit));
+    return await this.usersService.findAll(Number(limit));
   }
 
   @Get(':id')
   findOne(
     @Param('id') id: string,
-    @Query('email') email?: string,
-  ): ApiResponse<Users> {
-    console.log(email);
-    return this.usersService.findOne(id);
+    @Query('detailed') detailed?: boolean,
+  ): Promise<ApiResponse<User | null>> {
+    return this.usersService.findOne(id,detailed);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string,@Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
