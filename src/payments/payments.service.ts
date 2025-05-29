@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,13 +15,64 @@ export class PaymentsService {
     return 'This action adds a new payment';
   }
 
-  findAll() {
-    return `This action returns all payments`;
-  }
+  async findAll(detailed:boolean=false) {
+    if (detailed) {
+      const payments =await this.paymentRepository.find({
+        relations: {
+          whichEvent: true,
+          whoPaid:true
+        }
+      })
+      if (payments.length === 0) {
+        throw new NotFoundException(['no payments detail found'])
+      }
+      return {
+        status: 'success',
+        message: 'payments details found',
+        data:payments
+      }
+    }
+    const payments = await this.paymentRepository.find()
+    if (payments.length===0) {
+      throw new NotFoundException(['no payments detail found'])
+    }
+    return {
+      status: 'success',
+      message: 'payments details found',
+      data: payments
+    }
+}
 
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
-  }
+ async findOne(id: string,detailed:boolean=false) {
+    if (detailed) {
+      const payments =await this.paymentRepository.findOne({
+        where:{payment_id:id},
+        relations: {
+          whichEvent: true,
+          whoPaid: true
+        }
+      })
+      if (!payments) {
+        throw new NotFoundException(['no payments detail found'])
+      }
+      return {
+        status: 'success',
+        message: 'payments details found',
+        data: payments
+      }
+    }
+    const payments = await this.paymentRepository.findOne({
+      where: { payment_id: id },
+    })
+    if (!payments) {
+      console.log(payments)
+      throw new NotFoundException(['no payments detail found'])
+    }
+    return {
+      status: 'success',
+      message: 'payments details found',
+      data: payments
+    }  }
 
   update(id: number, updatePaymentDto: UpdatePaymentDto) {
     console.log(updatePaymentDto);

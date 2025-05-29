@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -21,13 +22,13 @@ export class PaymentsController {
   }
 
   @Get()
-  findAll() {
-    return this.paymentsService.findAll();
+  findAll(@Query('detailed') detailed: boolean) {
+    return this.paymentsService.findAll(detailed);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.paymentsService.findOne(+id);
+  findOne(@Param('id') id: string,@Query('detailed') detailed:boolean) {
+    return this.paymentsService.findOne(id,detailed);
   }
 
   @Patch(':id')

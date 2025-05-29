@@ -1,0 +1,11 @@
+@url=http://localhost:3000
+
+GET {{url}}/payments
+
+###
+GET {{url}}/payments?detailed=true
+
+###
+GET {{url}}/payments/e90ce9a0-8718-419f-a9ba-2563cca93bb0
+###
+GET {{url}}/payments/e90ce9a0-8718-419f-a9ba-2563cca93bb0?detailed=true
