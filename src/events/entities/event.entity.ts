@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Feedback } from "src/feedback/entities/feedback.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity({name:'events'})
 export class Event {
   @PrimaryGeneratedColumn('uuid')
   event_id: string;
@@ -29,4 +30,7 @@ export class Event {
       onUpdate: 'CURRENT_TIMESTAMP',
     })
     updateAt: Date;
+  
+  @OneToMany(() => Feedback, (feedback) => feedback.event)
+  feedbacks: Feedback[];
 }

@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-@Entity()
+import { Event } from "src/events/entities/event.entity";
+import { User } from "src/users/entities/user.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+@Entity({name:'feedbacks'})
 export class Feedback {
   @PrimaryGeneratedColumn('uuid')
   feedback_id: string;
@@ -14,5 +16,15 @@ export class Feedback {
       type: 'timestamp',
       default: () => 'CURRENT_TIMESTAMP',
     })
-    createAt: Date;
+  createAt: Date;
+
+  // M -> 1 [feedbacks]evemt
+  @ManyToOne(() => Event, (even) => even.feedbacks)
+  event: Event
+  
+  // M -> 1 [feedbacks]user
+  @ManyToOne(()=>User,(user)=>user.feedback)
+  owner: User
+
+  
 }
