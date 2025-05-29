@@ -8,16 +8,13 @@ export class EventRegistration {
   @PrimaryGeneratedColumn('uuid')
   registration_id: string;
 
-  @Column()
-  event_id: string;
-
   @Column('date')
   registration_date: string;
 
   @Column({ type: 'enum', enum: RegistationStatus, default: RegistationStatus.PENDING})
   payment_status: RegistationStatus;
 
-  @Column({ type:'decimal',precision:3,scale:2})
+  @Column({ type:'decimal',scale:2})
   payment_amount: number;
 
   // user who paid M -> 1

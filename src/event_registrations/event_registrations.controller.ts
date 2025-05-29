@@ -11,7 +11,7 @@ import { EventRegistrationsService } from './event_registrations.service';
 import { CreateEventRegistrationDto } from './dto/create-event_registration.dto';
 import { UpdateEventRegistrationDto } from './dto/update-event_registration.dto';
 
-@Controller('event-registrations')
+@Controller('event_registrations')
 export class EventRegistrationsController {
   constructor(
     private readonly eventRegistrationsService: EventRegistrationsService,
