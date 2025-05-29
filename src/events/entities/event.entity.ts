@@ -1,3 +1,4 @@
+import { EventRegistration } from "src/event_registrations/entities/event_registration.entity";
 import { Feedback } from "src/feedback/entities/feedback.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -31,6 +32,11 @@ export class Event {
     })
     updateAt: Date;
   
+  // one event with many feedbacks
   @OneToMany(() => Feedback, (feedback) => feedback.event)
   feedbacks: Feedback[];
+
+  // one event with multiple registration
+  @OneToMany(() => EventRegistration, (event_registration) => event_registration.registeredEvent)
+  registrations: EventRegistration[]
 }

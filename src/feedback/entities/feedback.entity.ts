@@ -18,7 +18,7 @@ export class Feedback {
     })
   createAt: Date;
 
-  // M -> 1 [feedbacks]evemt
+  // M -> 1 [feedbacks]event
   @ManyToOne(() => Event, (even) => even.feedbacks)
   event: Event
   
