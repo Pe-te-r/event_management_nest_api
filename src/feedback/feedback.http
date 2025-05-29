@@ -4,3 +4,5 @@
 GET {{url}}/feedbacks?detailed=true
 ###
 GET {{url}}/feedbacks
+###
+GET {{url}}/feedbacks/6f8967ab-e42d-4747-a98e-18768202cbd7?detailed=true

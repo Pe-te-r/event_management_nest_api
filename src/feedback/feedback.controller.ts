@@ -27,8 +27,8 @@ export class FeedbackController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.feedbackService.findOne(+id);
+  findOne(@Param('id') id: string,@Query('detailed') detailed:boolean) {
+    return this.feedbackService.findOne(id,detailed);
   }
 
   @Patch(':id')
