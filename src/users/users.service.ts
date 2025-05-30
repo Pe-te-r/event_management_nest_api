@@ -1,7 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-// import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { v4 as uuidv4 } from 'uuid';
 import { ApiResponse } from 'src/responseType';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -93,22 +91,22 @@ export class UsersService {
         message: `User with id ${id} not found`,
       };
     }
-    console.log(updateUserDto);
-    await this.userRepository.update(id,updateUserDto)
+    await this.userRepository.update(id, updateUserDto);
     return {
       status: 'success',
       message: `This action updates a #${id} user`,
     };
   }
 
-  remove(id: string) {
-    const foundUser = this.userRepository.findOne({where:{id:id}});
+  async remove(id: string) {
+    const foundUser =await this.userRepository.findOne({where:{id:id}});
     if (!foundUser) {
       return {
         status: 'error',
         message: `User with id ${id} not found`,
       };
     }
+    await this.userRepository.delete(id)
     return {
       status: 'success',
       message: `This action removed a user with id #${id}`,
