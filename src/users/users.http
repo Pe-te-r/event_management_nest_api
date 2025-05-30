@@ -22,9 +22,15 @@ GET {{url}}/users?email=alice@example.com
 
 ## for one user
 ###
-GET {{url}}/users/ec64b9ef-fc10-4839-a36b-5eda25417d43?detailed=true
+GET {{url}}/users/ec64b9ef-fc10-4839-a36b-5eda25417d43
 
 ###detailed user
 GET {{url}}/users/bb7c184e-fcf6-4ec6-b98e-664c6c79c2be?detailed=true
 
+###
+PATCH {{url}}/users/ec64b9ef-fc10-4839-a36b-5eda25417d43
+Content-Type: application/json
 
+{
+  "last_name":"muthoni"
+}

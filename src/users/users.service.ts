@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 // import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,13 +16,16 @@ export class UsersService {
   ) {}
   
   async create(createUserDto: CreateUserDto): Promise<ApiResponse<undefined>> {
-    // await user.insertUser(createUserDto);
+    const email_found = await this.userRepository.findOne({ where: { email: createUserDto.email } })
+    if (email_found) {
+     throw new ConflictException(`the user email ${email_found.email} already exits`) 
+    }
     const newUser = this.userRepository.create(createUserDto)
     const savedUser = await this.userRepository.save(newUser)
 
     return {
       status: 'success',
-      message: `New user added with uuid ${newUser.id}`,
+      message: `New user added with uuid ${savedUser.id}`,
     };
   }
 
@@ -32,10 +35,7 @@ export class UsersService {
        where: {email:email}
       })
       if (!user) {
-        return {
-          status: 'error',
-          message: `This email ${email} is not found`,
-        };
+        throw new NotFoundException(`email ${email} not found`)
       }
       return {
         status: 'success',
@@ -43,7 +43,10 @@ export class UsersService {
         data: user,
       };
     }
-    const user = await this.userRepository.find()
+   const user = await this.userRepository.find()
+   if (user.length === 0) {
+     throw new NotFoundException('no user found')
+   }
     return {
       status: 'success',
       message: 'all users retrived',
@@ -82,8 +85,8 @@ export class UsersService {
     };
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    const foundUser = this.userRepository.findOne({where:{id:id}});
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const foundUser =await this.userRepository.findOne({where:{id:id}});
     if (!foundUser) {
       return {
         status: 'error',
@@ -91,6 +94,7 @@ export class UsersService {
       };
     }
     console.log(updateUserDto);
+    await this.userRepository.update(id,updateUserDto)
     return {
       status: 'success',
       message: `This action updates a #${id} user`,
