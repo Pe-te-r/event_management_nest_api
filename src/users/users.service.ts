@@ -41,7 +41,7 @@ export class UsersService {
         data: user,
       };
     }
-   const user = await this.userRepository.find()
+   const user = await this.userRepository.find({take:limit})
    if (user.length === 0) {
      throw new NotFoundException('no user found')
    }
