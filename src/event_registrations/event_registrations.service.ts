@@ -42,15 +42,15 @@ export class EventRegistrationsService {
     }
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} eventRegistration`;
   }
 
-  update(id: number, updateEventRegistrationDto: UpdateEventRegistrationDto) {
+  update(id: string, updateEventRegistrationDto: UpdateEventRegistrationDto) {
     return `This action updates a #${id} eventRegistration`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} eventRegistration`;
   }
 }

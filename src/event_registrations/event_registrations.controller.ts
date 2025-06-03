@@ -11,6 +11,7 @@ import {
 import { EventRegistrationsService } from './event_registrations.service';
 import { CreateEventRegistrationDto } from './dto/create-event_registration.dto';
 import { UpdateEventRegistrationDto } from './dto/update-event_registration.dto';
+import { ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('event_registrations')
 export class EventRegistrationsController {
@@ -19,33 +20,39 @@ export class EventRegistrationsController {
   ) {}
 
   @Post()
+  @ApiOperation({summary:'create registration event'})
   create(@Body() createEventRegistrationDto: CreateEventRegistrationDto) {
     return this.eventRegistrationsService.create(createEventRegistrationDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'get all registration events' })
+  @ApiQuery({ name:'detailed',required:false,description:'toggle for more details'})    
   findAll(@Query('detailed') detailed:boolean) {
     return this.eventRegistrationsService.findAll(detailed);
   }
-
+  
   @Get(':id')
+  @ApiOperation({summary:'get registration event by id'})
   findOne(@Param('id') id: string) {
-    return this.eventRegistrationsService.findOne(+id);
+    return this.eventRegistrationsService.findOne(id);
   }
-
+  
   @Patch(':id')
+  @ApiOperation({summary:'update registration event by id'})
   update(
     @Param('id') id: string,
     @Body() updateEventRegistrationDto: UpdateEventRegistrationDto,
   ) {
     return this.eventRegistrationsService.update(
-      +id,
+      id,
       updateEventRegistrationDto,
     );
   }
-
+  
   @Delete(':id')
+  @ApiOperation({summary:'delete registration event by id'})
   remove(@Param('id') id: string) {
-    return this.eventRegistrationsService.remove(+id);
+    return this.eventRegistrationsService.remove(id);
   }
 }
