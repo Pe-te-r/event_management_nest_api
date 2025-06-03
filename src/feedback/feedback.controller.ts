@@ -26,15 +26,15 @@ export class FeedbackController {
   @Get()
   @ApiOperation({ summary: 'get all feedbacks' })
   @ApiQuery({type:'boolean',name:'detailed',required:false})
-  findAll(@Query('detailed') detailed:boolean) {
-    return this.feedbackService.findAll(detailed);
+  findAll(@Query('detailed') detailed:string) {
+    return this.feedbackService.findAll(detailed==='true');
   }
   
   @Get(':id')
   @ApiOperation({ summary: 'get feedbacks by id' })
   @ApiQuery({type:'boolean',name:'detailed',required:false})
-  findOne(@Param('id') id: string,@Query('detailed') detailed:boolean) {
-    return this.feedbackService.findOne(id,detailed);
+  findOne(@Param('id') id: string,@Query('detailed') detailed:string) {
+    return this.feedbackService.findOne(id,detailed==='true');
   }
   
   @Patch(':id')

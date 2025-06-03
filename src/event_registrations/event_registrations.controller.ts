@@ -28,8 +28,8 @@ export class EventRegistrationsController {
   @Get()
   @ApiOperation({ summary: 'get all registration events' })
   @ApiQuery({ name:'detailed',required:false,description:'toggle for more details'})    
-  findAll(@Query('detailed') detailed:boolean) {
-    return this.eventRegistrationsService.findAll(detailed);
+  findAll(@Query('detailed') detailed:string) {
+    return this.eventRegistrationsService.findAll(detailed==='true');
   }
   
   @Get(':id')

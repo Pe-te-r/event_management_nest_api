@@ -8,7 +8,7 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import {  UsersService } from './users.service';
+import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -25,7 +25,7 @@ export class UsersController {
     console.log(createUserDto);
     return this.usersService.create(createUserDto);
   }
-  
+
   // this about getting all users
   @Get()
   @ApiOperation({ summary: 'Get all users' })
@@ -44,17 +44,17 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get users by id' })
-  @ApiQuery({name:'detailed',required:false,type:'boolean',default:false,description:'Get user details with more info'})
+  @ApiQuery({ name: 'detailed', required: false, type: 'boolean', description: 'Get user details with more info' })
   findOne(
     @Param('id') id: string,
-    @Query('detailed') detailed?: boolean,
+    @Query('detailed') detailed?: string,
   ): Promise<ApiResponse<User | null>> {
-    return this.usersService.findOne(id,detailed);
+    return this.usersService.findOne(id, detailed==='true');
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update users by id' })
-  update(@Param('id') id: string,@Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
