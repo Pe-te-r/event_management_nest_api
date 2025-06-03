@@ -12,16 +12,20 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
   
+  @ApiProperty()
   @IsString()
   first_name: string;
   
+  @ApiProperty({required:false})
   @IsString()
   @IsOptional()
   last_name: string;
   
+  @ApiProperty()
   @IsNotEmpty()
   password: string;
   
+  @ApiProperty({required:false})
   @IsOptional()
   @IsNumberString()
   phone: string;
