@@ -10,6 +10,7 @@ import { DatabaseModule } from './database/database.module';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { createKeyv, Keyv } from '@keyv/redis';
 import { CacheableMemory } from 'cacheable';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -40,6 +41,7 @@ import { CacheableMemory } from 'cacheable';
     EventRegistrationsModule,
     FeedbackModule,
     PaymentsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [

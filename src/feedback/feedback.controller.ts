@@ -43,12 +43,12 @@ export class FeedbackController {
     @Param('id') id: string,
     @Body() updateFeedbackDto: UpdateFeedbackDto,
   ) {
-    return this.feedbackService.update(+id, updateFeedbackDto);
+    return this.feedbackService.update(id, updateFeedbackDto);
   }
   
   @Delete(':id')
   @ApiOperation({ summary: 'delete feedbacks by id' })
   remove(@Param('id') id: string) {
-    return this.feedbackService.remove(+id);
+    return this.feedbackService.remove(id);
   }
 }
