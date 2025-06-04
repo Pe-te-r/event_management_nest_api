@@ -8,10 +8,10 @@ export class CreateEventRegistrationDto {
   @ApiProperty()
   @IsUUID()
   user_id: string;
-  @ApiProperty()
+  @ApiProperty({example:'2029-09-02'})
   @IsDate()
   registration_date: Date;
-  @ApiProperty()
+  @ApiProperty({example:3000})
   @IsNumber()
   payment_amount: number;
 }

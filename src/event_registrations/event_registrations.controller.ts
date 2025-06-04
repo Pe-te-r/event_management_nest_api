@@ -27,15 +27,16 @@ export class EventRegistrationsController {
 
   @Get()
   @ApiOperation({ summary: 'get all registration events' })
-  @ApiQuery({ name:'detailed',required:false,description:'toggle for more details'})    
+  @ApiQuery({ name:'detailed',required:false,type:'boolean',description:'toggle for more details'})    
   findAll(@Query('detailed') detailed:string) {
     return this.eventRegistrationsService.findAll(detailed==='true');
   }
   
   @Get(':id')
   @ApiOperation({summary:'get registration event by id'})
-  findOne(@Param('id') id: string) {
-    return this.eventRegistrationsService.findOne(id);
+  @ApiQuery({ name:'detailed',required:false,type:'boolean',default:false,description:'toggle for more details'})    
+  findOne(@Param('id') id: string,@Query('detailed') detailed:string) {
+    return this.eventRegistrationsService.findOne(id,detailed==='true');
   }
   
   @Patch(':id')

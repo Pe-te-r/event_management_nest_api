@@ -9,7 +9,7 @@ export class EventRegistration {
   registration_id: string;
 
   @Column('date')
-  registration_date: string;
+  registration_date: Date;
 
   @Column({ type: 'enum', enum: RegistationStatus, default: RegistationStatus.PENDING})
   payment_status: RegistationStatus;
