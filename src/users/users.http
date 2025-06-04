@@ -7,12 +7,10 @@ POST {{url}}/users
 Content-Type: application/json
 
 {
-  "first_name":"shakirah",
-  "last_name":"muthoni",
-  "email":"shakirah8526@duck.com",
+  "first_name":"mary1",
+  "email":"mary21@duck.com",
   "phone":"0712544200",
-  "role":"admin",
-  "password":"shakirah@8526"
+  "password":"mary@8526"
 }
 
 

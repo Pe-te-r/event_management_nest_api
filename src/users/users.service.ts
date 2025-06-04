@@ -26,7 +26,7 @@ export class UsersService {
     if (email_found) {
       throw new ConflictException(`the user email ${email_found.email} already exits`)
     }
-    // createUserDto.password =await this.hashData(createUserDto.password)
+    createUserDto.password =await this.hashData(createUserDto.password)
     const newUser = this.userRepository.create(createUserDto)
     const savedUser = await this.userRepository.save(newUser)
 

@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Param, Get} from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Public } from './decorator/public.decorator';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RtGuard } from './guards';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -25,13 +26,13 @@ export class AuthController {
    return this.authService.logout(id)
   }
   @Public()
+  @UseGuards(RtGuard)
   @Post('refresh')
   @ApiOperation({ summary: 'Refresh access and refresh tokens' })
-  refresh(@Body('refreshToken') token: string) {
+  refresh(@Body('token') token: string) {
     return this.authService.refreshToken(token);
   }
 
-  @Public()
   @Post('refresh/access')
   @ApiOperation({ summary: 'Get new access token using refresh token (no rotation)' })
   refreshAccessTokenOnly(@Body('refreshToken') refreshToken: string) {

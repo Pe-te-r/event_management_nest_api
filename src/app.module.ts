@@ -22,22 +22,22 @@ import { AtGuard } from './auth/guards';
       isGlobal: true,
       envFilePath: ['.env.development'],
     }),
-    // CacheModule.registerAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   isGlobal: true,
-    //   useFactory: (configService: ConfigService) => {
-    //     return {
-    //       ttl: 60000, // 60 sec: Cache time-to-live
-    //       stores: [
-    //         new Keyv({
-    //           store: new CacheableMemory({ ttl: 30000, lruSize: 5000 }),
-    //         }),
-    //         createKeyv(configService.getOrThrow<string>('REDIS_URL')),
-    //       ],
-    //     };
-    //   },
-    // }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      isGlobal: true,
+      useFactory: (configService: ConfigService) => {
+        return {
+          ttl: 60000, // 60 sec: Cache time-to-live
+          stores: [
+            new Keyv({
+              store: new CacheableMemory({ ttl: 30000, lruSize: 5000 }),
+            }),
+            createKeyv(configService.getOrThrow<string>('REDIS_URL')),
+          ],
+        };
+      },
+    }),
     DatabaseModule,
     AuthModule,
     UsersModule,
@@ -48,10 +48,10 @@ import { AtGuard } from './auth/guards';
   ],
   controllers: [],
   providers: [
-    // {
-    //   provide: 'APP_INTERCEPTOR',
-    //   useClass: CacheInterceptor,
-    // },
+    {
+      provide: 'APP_INTERCEPTOR',
+      useClass: CacheInterceptor,
+    },
     {
       provide: APP_GUARD,
       useClass: AtGuard,

@@ -80,7 +80,7 @@ export class AuthService {
   }
   async login(data:CreateAuthDto) {
     const user = await this.getUserOrFail(data.email)
-    if (user.password !== data.password) {
+    if (!(await this.comparePasswords(data.password,user.password))) {
       throw new UnauthorizedException(`user details does not match`)
     }
     const { accessToken, refreshToken } = await this.getTokens(user.id, user.email);
