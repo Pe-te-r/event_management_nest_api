@@ -40,12 +40,12 @@ export class PaymentsController {
   @Patch(':id')
   @ApiOperation({summary:'update payment by id'})
   update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentsService.update(+id, updatePaymentDto);
+    return this.paymentsService.update(id, updatePaymentDto);
   }
   
   @Delete(':id')
   @ApiOperation({summary:'delete payment by id'})
   remove(@Param('id') id: string) {
-    return this.paymentsService.remove(+id);
+    return this.paymentsService.remove(id);
   }
 }

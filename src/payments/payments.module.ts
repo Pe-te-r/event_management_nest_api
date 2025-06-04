@@ -4,9 +4,11 @@ import { PaymentsController } from './payments.controller';
 import { DatabaseModule } from 'src/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
+import { User } from 'src/users/entities/user.entity';
+import { EventRegistration } from 'src/event_registrations/entities/event_registration.entity';
 
 @Module({
-  imports: [DatabaseModule,TypeOrmModule.forFeature([Payment])],
+  imports: [DatabaseModule, TypeOrmModule.forFeature([Payment, User, EventRegistration])],
   controllers: [PaymentsController],
   providers: [PaymentsService],
 })

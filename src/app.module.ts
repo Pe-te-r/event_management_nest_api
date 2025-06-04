@@ -13,6 +13,7 @@ import { CacheableMemory } from 'cacheable';
 import { AuthModule } from './auth/auth.module';
 
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,12 +37,12 @@ import { AuthModule } from './auth/auth.module';
     //   },
     // }),
     DatabaseModule,
+    AuthModule,
     UsersModule,
     EventsModule,
     EventRegistrationsModule,
     FeedbackModule,
     PaymentsModule,
-    AuthModule,
   ],
   controllers: [],
   providers: [
