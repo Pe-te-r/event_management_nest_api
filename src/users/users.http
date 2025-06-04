@@ -1,5 +1,6 @@
-# @url = http://localhost:3000
-@url = https://event-management-nest-api.onrender.com
+@url = http://localhost:3000
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjI0MGVjYi1iNzAxLTQ2YWQtYjM4Ny03ODkzNjdhNTA4YWQiLCJlbWFpbCI6Im1hcnlAZ21haWwuY29tIiwiaWF0IjoxNzQ5MDY4ODM1LCJleHAiOjE3NDkwNzAwMzV9.EJQNLzjMyET5OhNFwR81JkYuSZnXs-stzkvepF41Tug
+# @url = https://event-management-nest-api.onrender.com
 ##createUser
 ###
 POST {{url}}/users
@@ -18,6 +19,8 @@ Content-Type: application/json
 ## for all users
 ###
 GET {{url}}/users
+Authorization: Bearer {{access_token}}
+
 ### search email
 GET {{url}}/users?email=alice@example.com
 

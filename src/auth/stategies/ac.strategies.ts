@@ -10,13 +10,14 @@ type JWTPayload = {
 };
 
 @Injectable()
-export class AtStrategy extends PassportStrategy(Strategy, 'jwt-at') {
+export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly configServices: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), 
       secretOrKey: configServices.getOrThrow<string>('JWT_ACCESS_TOKEN_SECRET'),
     });
   }
+  
 
   validate(payload: JWTPayload) {
     return payload;

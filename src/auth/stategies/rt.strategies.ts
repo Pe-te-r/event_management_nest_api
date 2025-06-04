@@ -17,7 +17,7 @@ interface JwtPayloadWithRt extends JwtPayload {
 }
 
 @Injectable()
-export class RfStrategy extends PassportStrategy(Strategy, 'jwt-rt') {
+export class RTStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(private readonly configService: ConfigService) {
     const options: StrategyOptionsWithRequest = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -25,7 +25,7 @@ export class RfStrategy extends PassportStrategy(Strategy, 'jwt-rt') {
       passReqToCallback: true,
     };
     super(options);
-    console.log('RfStrategy constructor completed');
+    // console.log('RfStrategy constructor completed');
   }
 
   validate(req: Request, payload: JwtPayload): JwtPayloadWithRt {
