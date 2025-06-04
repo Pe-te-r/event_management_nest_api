@@ -44,7 +44,7 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get users by id' })
-  @ApiQuery({ name: 'detailed', required: false, type: 'boolean', description: 'Get user details with more info' })
+  @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default:false, description: 'Get user details with more info' })
   findOne(
     @Param('id') id: string,
     @Query('detailed') detailed?: string,

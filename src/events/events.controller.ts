@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -23,15 +24,17 @@ export class EventsController {
   }
 
   @Get()
-  @ApiOperation({summary:'get all events'})
-  findAll() {
-    return this.eventsService.findAll();
+  @ApiOperation({ summary: 'get all events' })
+  @ApiQuery({name:'detailed',required:false,description:'get more details on events',type:'boolean',default:false})
+  findAll(@Query('detailed') detailed?: string) {
+    return this.eventsService.findAll(detailed==='true');
   }
   
   @Get(':id')
   @ApiOperation({summary:'get event by id'})
-  findOne(@Param('id') id: string) {
-    return this.eventsService.findOne(id);
+  @ApiQuery({name:'detailed',required:false,type:'boolean',description:'get more details on event',default:false})
+  findOne(@Param('id') id: string, @Query('detailed') detailed?: string) {
+    return this.eventsService.findOne(id,detailed==='true');
   }
   
   @Patch(':id')

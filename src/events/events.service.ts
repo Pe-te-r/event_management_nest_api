@@ -24,32 +24,54 @@ export class EventsService {
     return 'This action adds a new event';
   }
 
-  async findAll(): Promise<ApiResponse<Event[] | null>> {
-    const events = await this.eventRepository.find()
-    if (!events) {
-      return {
-        status: 'error',
-        message:'no event found',
+  async findAll(detailed:boolean=false): Promise<ApiResponse<Event[] | null>> {
+    if (detailed) {
+      const events = await this.eventRepository.find({
+        relations: { feedbacks: true, registrations: true }
+      })
+      if (!events) {
+        throw new NotFoundException('no events found')
       }
+      return {
+        status: 'success',
+        message: 'events retrived',
+        data:events 
+      }
+      
     }
 
+    const events = await this.eventRepository.find()
+    if (!events) {
+     throw new NotFoundException('no events found')
+    }
     return {
       status: 'success',
-      message: 'all the events found',
+      message: 'events retrived',
       data:events
     }
   }
 
-  async findOne(id: string): Promise<ApiResponse<Event | null>> {
+  async findOne(id: string,detailed:boolean=false): Promise<ApiResponse<Event | null>> {
+    if (detailed) {
+      const event = await this.eventRepository.findOne({
+        where: { event_id: id },
+        relations: { feedbacks: true, registrations: true }
+      })
+      if (!event) {
+        throw new NotFoundException(`Event with id ${id} not found`);
+      }
+      return {
+        status: 'success',
+        message: 'event found',
+        data: event
+      }
+
+    }
     const event =await this.eventRepository.findOne({
       where:{event_id:id}
     })
     if (!event) {
       throw new NotFoundException(`Event with id ${id} not found`);
-      // return {
-      //   status: 'error',
-      //   message:`event with id ${id} not found`
-      // }
     }
     return {
       status: 'success',
@@ -58,11 +80,18 @@ export class EventsService {
     }
   }
 
-  update(id: string, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${id} event`;
-  }
-
-  remove(id: string) {
-    return `This action removes a #${id} event`;
+  async update(id: string, updateEventDto: UpdateEventDto) {
+    await this.eventRepository.update(id,updateEventDto);
+    return {
+      status: 'success',
+      message: `event id ${id} updated success`,
+    }  }
+    
+    async remove(id: string) {
+      await this.eventRepository.delete(id)
+      return {
+        status: 'success',
+        message: `event id ${id} deleted success`,
+    }
   }
 }
