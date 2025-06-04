@@ -5,19 +5,28 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) { }
-
+    private async hashData(password: string): Promise<string> {
+      const saltRounds = 10;
+      return await bcrypt.hash(password, saltRounds);
+    }
+  
+    private async comparePasswords(plainText: string, hash: string): Promise<boolean> {
+      return await bcrypt.compare(plainText, hash);
+    }
+  
   async create(createUserDto: CreateUserDto): Promise<ApiResponse<undefined>> {
     const email_found = await this.userRepository.findOne({ where: { email: createUserDto.email } })
     if (email_found) {
       throw new ConflictException(`the user email ${email_found.email} already exits`)
     }
+    // createUserDto.password =await this.hashData(createUserDto.password)
     const newUser = this.userRepository.create(createUserDto)
     const savedUser = await this.userRepository.save(newUser)
 

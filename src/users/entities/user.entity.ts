@@ -27,6 +27,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({nullable:true,})
+  hashed_token?: string;
+
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',

@@ -7,7 +7,6 @@ import { User } from 'src/users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { AtStrategy, RTStrategy } from './stategies';
 import { AtGuard, RtGuard } from './guards';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -19,8 +18,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   providers: [AuthService,
     AtStrategy,
     AtGuard,
-    // RTStrategy,
-    // RtGuard,
+    RTStrategy,
+    RtGuard,
   ],
   exports: [AuthService],
 
