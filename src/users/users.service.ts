@@ -105,6 +105,10 @@ export class UsersService {
         message: `User with id ${id} not found`,
       };
     }
+    if (updateUserDto.password) {
+      updateUserDto.password = await this.hashData(updateUserDto.password)
+    }
+    console.log(updateUserDto)
     await this.userRepository.update(id, updateUserDto);
     return {
       status: 'success',

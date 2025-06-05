@@ -1,6 +1,6 @@
 @url = http://localhost:3000
-@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhMjI0MGVjYi1iNzAxLTQ2YWQtYjM4Ny03ODkzNjdhNTA4YWQiLCJlbWFpbCI6Im1hcnlAZ21haWwuY29tIiwiaWF0IjoxNzQ5MDY4ODM1LCJleHAiOjE3NDkwNzAwMzV9.EJQNLzjMyET5OhNFwR81JkYuSZnXs-stzkvepF41Tug
-# @url = https://event-management-nest-api.onrender.com
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YmYwOTk5Yi01MmViLTRjMTItYjg0NS1lZDJkY2JiMTE2MzEiLCJlbWFpbCI6Im1hcnkyMUBkdWNrLmNvbSIsImlhdCI6MTc0OTEwODM3NiwiZXhwIjoxNzQ5MTA5NTc2fQ.glRaAhl4ubqy907PEE06CyHnmid-GI6kmk3Y_PtHrhE
+# @refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YmYwOTk5Yi01MmViLTRjMTItYjg0NS1lZDJkY2JiMTE2MzEiLCJlbWFpbCI6Im1hcnkyMUBkdWNrLmNvbSIsImlhdCI6MTc0OTEwODM3NiwiZXhwIjoxNzQ5NDUzOTc2fQ.c5BJMcXPRbidZkYzbhc9Qc26cgDzYLF2l2w90oFXXWk
 ##createUser
 ###
 POST {{url}}/users
@@ -24,17 +24,19 @@ GET {{url}}/users?email=alice@example.com
 
 ## for one user
 ###
-GET {{url}}/users/ec64b9ef-fc10-4839-a36b-5eda25417d43
+GET {{url}}/users/ebdec6b3-f124-46f6-a84d-60b3eeb2f009
+Authorization: Bearer {{access_token}}
 
 ###detailed user
 GET {{url}}/users/bb7c184e-fcf6-4ec6-b98e-664c6c79c2be?detailed=true
 
 ###
-PATCH {{url}}/users/ec64b9ef-fc10-4839-a36b-5eda25417d43
+PATCH {{url}}/users/60a17254-de4c-4462-8eaf-0edd2e92d07e
+Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "last_name":"muthoni"
+  "password":"alice1234"
 }
 
 ###

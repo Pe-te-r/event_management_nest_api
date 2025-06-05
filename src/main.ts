@@ -22,11 +22,10 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, documentFactory, {
     swaggerOptions: {
-      persistAuthorization: true, // Persists authorization across page refreshes
+      persistAuthorization: true,
       requestInterceptor: (req) => {
-        // This ensures the token is sent in the format "Bearer <token>"
         if (req.headers?.Authorization) {
-          req.headers.Authorization = `Bearer ${req.headers.Authorization}`;
+          req.headers.Authorization = `${req.headers.Authorization}`;
         }
         return req;
       }

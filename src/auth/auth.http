@@ -1,16 +1,17 @@
 @url=http://localhost:3000
 
-@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YmYwOTk5Yi01MmViLTRjMTItYjg0NS1lZDJkY2JiMTE2MzEiLCJlbWFpbCI6Im1hcnkyMUBkdWNrLmNvbSIsImlhdCI6MTc0OTA3NzkwNywiZXhwIjoxNzQ5MDc5MTA3fQ._XqMMAbgVCeqzCi8968U1wfIegD7YZgE1UAzhNkcQIM
-@refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YmYwOTk5Yi01MmViLTRjMTItYjg0NS1lZDJkY2JiMTE2MzEiLCJlbWFpbCI6Im1hcnkyMUBkdWNrLmNvbSIsImlhdCI6MTc0OTA3NzkwNywiZXhwIjoxNzQ5NDIzNTA3fQ.yek2yV3uf7yLez2tqOKj654abLOkIRca9POx0A57ZKY
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YmYwOTk5Yi01MmViLTRjMTItYjg0NS1lZDJkY2JiMTE2MzEiLCJlbWFpbCI6Im1hcnkyMUBkdWNrLmNvbSIsImlhdCI6MTc0OTEwODM3NiwiZXhwIjoxNzQ5MTA5NTc2fQ.glRaAhl4ubqy907PEE06CyHnmid-GI6kmk3Y_PtHrhE
+@refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YmYwOTk5Yi01MmViLTRjMTItYjg0NS1lZDJkY2JiMTE2MzEiLCJlbWFpbCI6Im1hcnkyMUBkdWNrLmNvbSIsImlhdCI6MTc0OTEwODM3NiwiZXhwIjoxNzQ5NDUzOTc2fQ.c5BJMcXPRbidZkYzbhc9Qc26cgDzYLF2l2w90oFXXWk
 
 ###
 POST  {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "email":"mary21@duck.com",
-  "password":"mary@8526"
+  "email":"felix@example.com",
+  "password":"felix1234"
 }
+### "password":"mary@8526"
 
 ###
 POST {{url}}/auth/refresh/access
