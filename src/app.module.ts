@@ -60,6 +60,6 @@ import { AtGuard } from './auth/guards';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('users','events');
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,6 +16,7 @@ import { User } from './entities/user.entity';
 import { ApiResponse } from 'src/responseType';
 import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorator/public.decorator';
+import { UserD } from 'src/auth/decorator/user.decorator';
 
 
 @Controller('users')
@@ -50,8 +52,12 @@ export class UsersController {
   @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default:false, description: 'Get user details with more info' })
   findOne(
     @Param('id') id: string,
+    @UserD('sub') authUserId: string,
     @Query('detailed') detailed?: string,
   ): Promise<ApiResponse<User | null>> {
+    if (id !== authUserId) {
+      throw new ForbiddenException('You are not allowed to access this resource.');
+    }
     return this.usersService.findOne(id, detailed==='true');
   }
 

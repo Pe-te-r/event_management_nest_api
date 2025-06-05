@@ -1,16 +1,35 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { appendFileSync, mkdirSync, existsSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const authHeader = req.headers['authorization']; // OR: req.get('Authorization')
+  private readonly logFilePath: string;
 
-    console.log('\nRequest...');
-    console.log(`Method: ${req.method}`);
-    console.log(`Path: ${req.originalUrl}`);
-    console.log(`Authorization Header: ${authHeader || 'Not provided'}`);
-    console.log('Request...');
+  constructor() {
+    const logsDir = join(process.cwd(), 'logs');
+    if (!existsSync(logsDir)) {
+      mkdirSync(logsDir);
+      console.log('Created logs directory:', logsDir);
+    } else {
+      console.log('Logs directory exists:', logsDir);
+    }
+    this.logFilePath = join(logsDir, 'requests.log');
+  }
+
+  use(req: Request, res: Response, next: NextFunction) {
+    const { method, originalUrl, headers, body } = req;
+    const timestamp = new Date().toISOString();
+
+    const logEntry = `[${timestamp}] ${method} ${originalUrl}\nHeaders: ${JSON.stringify(headers)}\nBody: ${JSON.stringify(body)}\n\n`;
+
+    try {
+      appendFileSync(this.logFilePath, logEntry, { encoding: 'utf8' });
+    } catch (err) {
+      console.error('Failed to write log:', err);
+    }
+
     next();
   }
 }
