@@ -1,10 +1,13 @@
 @url = http://localhost:3000
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5MTE4MTk0LCJleHAiOjE3NDkxMTkzOTR9.k47wUnTFAgagAp6xlTCg0oNrOp9dmOcQg56NRpyxvzk
 
 ### all events
-GET {{url}}/events
+GET {{url}}/events?detailed=true
+Authorization: Bearer {{access_token}}
 
 ### one event
-GET {{url}}/events/90ad20ed-70db-4009-9e50-1e9ebd680642
+GET {{url}}/events/bba01fd1-a05e-4268-9f9e-68e4c0e5d36a?detailed=true
+Authorization: Bearer {{access_token}}
 
 
 ### creat an event

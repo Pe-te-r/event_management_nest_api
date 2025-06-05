@@ -1,6 +1,10 @@
 @url = http://localhost:3000
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5MTE4MTk0LCJleHAiOjE3NDkxMTkzOTR9.k47wUnTFAgagAp6xlTCg0oNrOp9dmOcQg56NRpyxvzk
+
 ###
-GET {{url}}/event_registrations
+
+GET {{url}}/event_registrations?detailed=true
+Authorization: Bearer {{access_token}}
 
 ###
 GET {{url}}/event_registrations?detailed=true

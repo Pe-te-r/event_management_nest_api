@@ -11,9 +11,10 @@ import {
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
-import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('feedbacks')
+@ApiBearerAuth('JWT-auth')
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 

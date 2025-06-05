@@ -17,6 +17,7 @@ import { ApiResponse } from 'src/responseType';
 import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorator/public.decorator';
 import { UserD } from 'src/auth/decorator/user.decorator';
+import { RoleEnum } from 'src/common/types/enums';
 
 
 @Controller('users')
@@ -37,8 +38,13 @@ export class UsersController {
   @ApiQuery({ name: 'limit', required: false, type: 'number', description: 'The number of users require to be retrived' })
   @ApiQuery({ name: 'email', required: false, type: 'string', description: 'Required when searching for user by email' })
   async findAll(
+    @UserD('role') role: RoleEnum,
     @Query() param?: { email: string; limit: number },
   ): Promise<ApiResponse<User[] | User>> {
+    console.log(role)
+    if (role !== RoleEnum.ADMIN) {
+      throw new ForbiddenException('Access denied: Admins only');
+    }
     console.log(param?.limit)
     const limit = param?.limit ?? 10;
     if (param?.email) {

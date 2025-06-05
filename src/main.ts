@@ -29,7 +29,7 @@ async function bootstrap() {
         }
         return req;
       }
-    }  
+    }
   });
 
   app.useGlobalPipes(new ValidationPipe());

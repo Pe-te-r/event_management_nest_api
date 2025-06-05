@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/responseType';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,8 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { UserD } from 'src/auth/decorator/user.decorator';
+import { RoleEnum } from 'src/common/types/enums';
 
 @Injectable()
 export class UsersService {
@@ -37,6 +39,7 @@ export class UsersService {
   }
 
   async findAll(limit: number, email?: string): Promise<ApiResponse<User[] | User>> {
+
     if (email) {
       const user = await this.userRepository.findOne({
         where: { email: email },

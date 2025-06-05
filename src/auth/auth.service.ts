@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { RoleEnum } from 'src/common/types/enums';
 
 
 @Injectable()
@@ -16,44 +17,35 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
   ) { }
-  private async getTokens(userId: string, email: string) {
+  private async getTokens(
+    userId: string,
+    email: string,
+    role: RoleEnum = RoleEnum.USER,
+  ) {
+    const payload = { sub: userId, email, role };
+
     const [at, rt] = await Promise.all([
-      this.jwtService.signAsync(
-        {
-          sub: userId,
-          email: email,
-        },
-        {
-          secret: this.configService.getOrThrow<string>(
-            'JWT_ACCESS_TOKEN_SECRET',
-          ),
-          expiresIn: this.configService.getOrThrow<string>(
-            'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-          ),
-        },
-      ),
-      this.jwtService.signAsync(
-        {
-          sub: userId,
-          email: email,
-        },
-        {
-          secret: this.configService.getOrThrow<string>(
-            'JWT_REFRESH_TOKEN_SECRET',
-          ),
-          expiresIn: this.configService.getOrThrow<string>(
-            'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-          ),
-        },
-      ),
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.getOrThrow<string>('JWT_ACCESS_TOKEN_SECRET'),
+        expiresIn: this.configService.getOrThrow<string>('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
+      }),
+      this.jwtService.signAsync(payload, {
+        secret: this.configService.getOrThrow<string>('JWT_REFRESH_TOKEN_SECRET'),
+        expiresIn: this.configService.getOrThrow<string>('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
+      }),
     ]);
-    return { accessToken: at, refreshToken: rt };
+
+    return {
+      accessToken: at,
+      refreshToken: rt,
+    };
   }
+  
 
   private async getUserOrFail(email: string) {
     const user = await this.userRepository.findOne({
       where: { email: email },
-      select:['id','email','password','hashed_token']
+      select:['id','email','password','hashed_token','role']
     })
     if (!user) {
       throw new UnauthorizedException(`user details does not match`)
@@ -83,7 +75,8 @@ export class AuthService {
     if (!(await this.comparePasswords(data.password,user.password))) {
       throw new UnauthorizedException(`user details does not match`)
     }
-    const { accessToken, refreshToken } = await this.getTokens(user.id, user.email);
+     console.log(user.role)
+    const { accessToken, refreshToken } = await this.getTokens(user.id, user.email,user.role);
     const hashed_token =await this.hashData(refreshToken)
     await this.userRepository.update(user.id,{hashed_token})
     return { accessToken, refreshToken: refreshToken };
@@ -116,7 +109,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      const tokens = await this.getTokens(user.id, user.email);
+      const tokens = await this.getTokens(user.id, user.email,user.role);
       const newHashedToken = await this.hashData(tokens.refreshToken);
 
       await this.userRepository.update(user.id, {
@@ -153,6 +146,7 @@ export class AuthService {
         {
           sub: user.id,
           email: user.email,
+          role:user.role
         },
         {
           secret: this.configService.getOrThrow<string>('JWT_ACCESS_TOKEN_SECRET'),

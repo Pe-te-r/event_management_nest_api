@@ -1,7 +1,8 @@
 @url=http://localhost:3000
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5MTE1MDU0LCJleHAiOjE3NDkxMTYyNTR9.yqeb5vExbfC66C2oNXoS-6MN9whQ03_meocVToav_v0
 
 GET {{url}}/payments
-
+Authorization: Bearer {{access_token}}
 ###
 GET {{url}}/payments?detailed=true
 

@@ -11,9 +11,10 @@ import {
 import { EventRegistrationsService } from './event_registrations.service';
 import { CreateEventRegistrationDto } from './dto/create-event_registration.dto';
 import { UpdateEventRegistrationDto } from './dto/update-event_registration.dto';
-import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('event_registrations')
+@ApiBearerAuth('JWT-auth')
 export class EventRegistrationsController {
   constructor(
     private readonly eventRegistrationsService: EventRegistrationsService,

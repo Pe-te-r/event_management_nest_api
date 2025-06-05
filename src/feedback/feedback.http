@@ -1,8 +1,12 @@
 @url=http://localhost:3000
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5MTE4MTk0LCJleHAiOjE3NDkxMTkzOTR9.k47wUnTFAgagAp6xlTCg0oNrOp9dmOcQg56NRpyxvzk
 
 ###
 GET {{url}}/feedbacks?detailed=true
+Authorization: Bearer {{access_token}}
+
 ###
 GET {{url}}/feedbacks
 ###
-GET {{url}}/feedbacks/6f8967ab-e42d-4747-a98e-18768202cbd7?detailed=true
+GET {{url}}/feedbacks/fed91784-5c55-4c7b-b744-00546444d4d5?detailed=true
+Authorization: Bearer {{access_token}}

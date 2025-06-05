@@ -12,7 +12,9 @@ import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { Public } from 'src/auth/decorator/public.decorator';
 
+@Public()
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
@@ -25,8 +27,8 @@ export class PaymentsController {
 
   @Get()
   @ApiOperation({summary:'get all payments'})
-  @ApiQuery({type:'detailed',required:false,description:'Toggle to get more details on payments'})
-  findAll(@Query('detailed') detailed: string) {
+  // @ApiQuery({type:'detailed',required:false,description:'Toggle to get more details on payments',default:false})
+  findAll(@Query('detailed') detailed?: string) {
     return this.paymentsService.findAll(detailed==='true');
   }
   
