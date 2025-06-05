@@ -45,13 +45,29 @@ export class PaymentsService {
 
   async findAll(detailed:boolean=false) {
     if (detailed) {
-      const payments =await this.paymentRepository.find({
-        relations: {
-          whichEvent: true,
-          whoPaid:true
-        }
-      })
-      if (payments.length === 0) {
+      // const payments =await this.paymentRepository.find({
+      //   relations: {
+      //     whichEvent: true,
+      //     whoPaid:true
+      //   }
+      // })
+      const payments = await this.paymentRepository
+        .createQueryBuilder('payment')
+        .leftJoinAndSelect('payment.whichEvent', 'event')
+        .leftJoinAndSelect('payment.whoPaid', 'user')
+        .select([
+          'payment.id',
+          'payment.amount',
+          'payment.status',
+          'payment.createdAt',
+          'event.id',
+          'event.title',      
+          'user.id',
+          'user.first_name',  
+          'user.email',
+        ])
+        .getMany();
+          if (payments.length === 0) {
         throw new NotFoundException(['no payments detail found'])
       }
       return {

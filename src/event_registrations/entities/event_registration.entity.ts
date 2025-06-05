@@ -18,14 +18,14 @@ export class EventRegistration {
   payment_amount: number;
 
   // user who paid M -> 1
-  @ManyToOne(() => User, (user) => user.registeredEvents)
+  @ManyToOne(() => User, (user) => user.registeredEvents, { onDelete: 'CASCADE' })
   paidUser: User;
 
   // event
-  @ManyToOne(() => Event, (event) => event.registrations)
+  @ManyToOne(() => Event, (event) => event.registrations, { onDelete: 'CASCADE' })
   registeredEvent: Event;
 
   // payment
-  @OneToMany(() => Payment, (payment) => payment.whichEvent)
+  @OneToMany(() => Payment, (payment) => payment.whichEvent, { onDelete: 'CASCADE' })
   payments: Payment[]
 }

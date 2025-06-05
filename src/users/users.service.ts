@@ -39,7 +39,8 @@ export class UsersService {
   async findAll(limit: number, email?: string): Promise<ApiResponse<User[] | User>> {
     if (email) {
       const user = await this.userRepository.findOne({
-        where: { email: email }
+        where: { email: email },
+        select:['id','first_name','last_name','email','phone','role','createAt','updateAt']
       })
       if (!user) {
         throw new NotFoundException(`email ${email} not found`)
@@ -67,6 +68,7 @@ export class UsersService {
       console.log('here')
       const foundUser = await this.userRepository.findOne({
         where: { id: id },
+        select: ['id', 'first_name', 'last_name', 'email', 'phone', 'role', 'createAt', 'updateAt'],
         relations: {
           feedback: true,
           payments: true,

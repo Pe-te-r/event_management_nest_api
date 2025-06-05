@@ -16,10 +16,10 @@ export class Payment {
   @Column({type:'enum', enum:PaymentStatus,default:PaymentStatus.PENDING})
   payment_status: PaymentStatus;
 
-  @ManyToOne(() => User, (user) => user.payments)
+  @ManyToOne(() => User, (user) => user.payments, { onDelete: 'CASCADE' })
   whoPaid: User;
 
-  @ManyToOne(() => EventRegistration, (event_register) => event_register.payments)
+  @ManyToOne(() => EventRegistration, (event_register) => event_register.payments, {onDelete:'CASCADE'})
   whichEvent: EventRegistration;
   
 }

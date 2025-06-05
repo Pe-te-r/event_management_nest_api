@@ -4,7 +4,7 @@ import { Event } from 'src/events/entities/event.entity';
 import { Feedback } from 'src/feedback/entities/feedback.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-@Entity({name:'users'})
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -27,7 +27,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column({nullable:true,})
+  @Column({ nullable: true, })
   hashed_token?: string;
 
   @Column({
@@ -47,7 +47,7 @@ export class User {
   createdEvents: Event[];
 
   // feedback 1->M
-  @OneToMany(()=> Feedback,(feedback)=>feedback.owner)
+  @OneToMany(() => Feedback, (feedback) => feedback.owner)
   feedback: Feedback[];
 
   // payment 1 -> M
@@ -55,7 +55,7 @@ export class User {
   payments: Payment[];
 
   // registration 1 -> M
-  @OneToMany(() => EventRegistration,(event_register)=> event_register.paidUser)
+  @OneToMany(() => EventRegistration, (event_register) => event_register.paidUser)
   registeredEvents: EventRegistration[]
 
 }

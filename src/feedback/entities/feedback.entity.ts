@@ -19,11 +19,11 @@ export class Feedback {
   createAt: Date;
 
   // M -> 1 [feedbacks]event
-  @ManyToOne(() => Event, (even) => even.feedbacks)
+  @ManyToOne(() => Event, (even) => even.feedbacks, { onDelete: 'CASCADE' })
   event: Event
   
   // M -> 1 [feedbacks]user
-  @ManyToOne(()=>User,(user)=>user.feedback)
+  @ManyToOne(() => User, (user) => user.feedback, { onDelete: 'CASCADE' })
   owner: User
 
   

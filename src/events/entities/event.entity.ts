@@ -33,7 +33,7 @@ export class Event {
     })
     updateAt: Date;
   // one event created by a user
-  @ManyToOne(() => User, (user) => user.createdEvents,{cascade:true})
+  @ManyToOne(() => User, (user) => user.createdEvents, { cascade: true, onDelete: 'CASCADE' })
   createdBy: User;
   
   // one event with many feedbacks
