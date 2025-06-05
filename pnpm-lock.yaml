@@ -59,6 +59,9 @@ importers:
       class-validator:
         specifier: ^0.14.2
         version: 0.14.2
+      nest-api:
+        specifier: 'link:'
+        version: 'link:'
       passport:
         specifier: ^0.7.0
         version: 0.7.0
