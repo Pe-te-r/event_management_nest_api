@@ -118,6 +118,7 @@ export class UsersService {
       message: `This action updates a #${id} user`,
     };
   }
+  
 
   async remove(id: string) {
     const foundUser = await this.userRepository.findOne({ where: { id: id } });
