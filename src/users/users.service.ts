@@ -119,6 +119,7 @@ export class UsersService {
     };
   }
   
+  
 
   async remove(id: string) {
     const foundUser = await this.userRepository.findOne({ where: { id: id } });
