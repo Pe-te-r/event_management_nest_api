@@ -1,4 +1,4 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/responseType';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,10 +6,11 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { UserD } from 'src/auth/decorator/user.decorator';
 import { RoleEnum } from 'src/common/types/enums';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 
 @Injectable()
+@UseGuards(RolesGuard)
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,

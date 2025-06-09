@@ -1,9 +1,6 @@
-// user.decorator.ts
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const UserD = createParamDecorator(
-  (data: keyof any, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    return data ? request.user?.[data] : request.user;
-  },
-);
+import { SetMetadata } from '@nestjs/common';
+import { RoleEnum } from 'src/common/types/enums';
+
+export const ROLES_KEY = 'roles';
+export const Roles = (...roles: RoleEnum[]) => SetMetadata(ROLES_KEY, roles);
