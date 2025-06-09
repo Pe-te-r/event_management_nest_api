@@ -9,6 +9,7 @@ type JWTPayload = {
   email: string;
 };
 
+
 @Injectable()
 export class AtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly configServices: ConfigService) {
