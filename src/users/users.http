@@ -1,5 +1,5 @@
 @url = http://localhost:3000
-@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5MTE4MTk0LCJleHAiOjE3NDkxMTkzOTR9.k47wUnTFAgagAp6xlTCg0oNrOp9dmOcQg56NRpyxvzk
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5NDY4ODg1LCJleHAiOjE3NDk0NzAwODV9._x1sarb81BAuuXoMTEKyeYtqBxqxTdV10ZjVt1tBH5w
 # @refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YmYwOTk5Yi01MmViLTRjMTItYjg0NS1lZDJkY2JiMTE2MzEiLCJlbWFpbCI6Im1hcnkyMUBkdWNrLmNvbSIsImlhdCI6MTc0OTEwODM3NiwiZXhwIjoxNzQ5NDUzOTc2fQ.c5BJMcXPRbidZkYzbhc9Qc26cgDzYLF2l2w90oFXXWk
 ##createUser
 ###
@@ -20,7 +20,12 @@ GET {{url}}/users
 Authorization: Bearer {{access_token}}
 
 ### search email
-GET {{url}}/users?email=alice@example.com
+GET {{url}}/users?email=mary21@duck.com
+Authorization: Bearer {{access_token}}
+
+###
+GET {{url}}/users?limit=2
+Authorization: Bearer {{access_token}}
 
 ## for one user
 ###
