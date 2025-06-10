@@ -16,11 +16,7 @@ export class UsersService {
       const saltRounds = 10;
       return await bcrypt.hash(password, saltRounds);
     }
-  
-    private async comparePasswords(plainText: string, hash: string): Promise<boolean> {
-      return await bcrypt.compare(plainText, hash);
-    }
-  
+    
   async create(createUserDto: CreateUserDto): Promise<ApiResponse<undefined>> {
     const email_found = await this.userRepository.findOne({ where: { email: createUserDto.email } })
     if (email_found) {
@@ -64,14 +60,13 @@ export class UsersService {
   }
 
   async findOne(id: string, detailed: boolean = false): Promise<ApiResponse<User | null>> {
-    console.log(detailed);
     if (detailed) {
-      console.log('here')
+      
       const foundUser = await this.userRepository.findOne({
         where: { id: id },
         select: ['id', 'first_name', 'last_name', 'email', 'phone', 'role', 'createAt', 'updateAt'],
         relations: {
-          feedback: true,
+          feedback: {},
           payments: true,
           registeredEvents: true,
           createdEvents: true
@@ -84,7 +79,6 @@ export class UsersService {
       };
     }
     const foundUser = await this.userRepository.findOne({ where: { id: id } })
-    console.log(foundUser)
     if (!foundUser) {
       return {
         status: 'error',
