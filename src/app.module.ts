@@ -13,22 +13,27 @@ import { CacheableMemory } from 'cacheable';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './auth/guards';
+import { seconds, ThrottlerGuard, ThrottlerModule, ThrottlerStorageService } from '@nestjs/throttler';
+import { EmailThrottlerGuard } from './auth/rate-limter/email-throtter';
+import { RedisThrottlerStorage } from './auth/rate-limter/redis-storage';
 
 
 
 @Module({
   imports: [
+    // register env
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.development'],
     }),
+    // register redis
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       isGlobal: true,
       useFactory: (configService: ConfigService) => {
         return {
-          ttl: 60000, // 60 sec: Cache time-to-live
+          ttl: 60000,
           stores: [
             new Keyv({
               store: new CacheableMemory({ ttl: 30000, lruSize: 5000 }),
@@ -37,6 +42,18 @@ import { AtGuard } from './auth/guards';
           ],
         };
       },
+    }),
+    // register rate limter
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        throttlers: [{
+          limit: Number(config.get('THROTTLE_TTL')),
+          ttl: seconds(Number(config.get('THROTTLE_LIMIT')))
+        }],
+        storage: new RedisThrottlerStorage(config),
+      }),
     }),
     DatabaseModule,
     AuthModule,
@@ -56,6 +73,12 @@ import { AtGuard } from './auth/guards';
       provide: APP_GUARD,
       useClass: AtGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    { provide: APP_GUARD, useClass: EmailThrottlerGuard },
+
   ],
 })
 export class AppModule implements NestModule {
