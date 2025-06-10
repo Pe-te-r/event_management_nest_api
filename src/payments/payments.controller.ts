@@ -27,15 +27,15 @@ export class PaymentsController {
   }
 
   @Get()
-  @ApiOperation({summary:'get all payments'})
-  // @ApiQuery({type:'detailed',required:false,description:'Toggle to get more details on payments',default:false})
+  @ApiOperation({ summary: 'get all payments here' })
+  @ApiQuery({ name: 'detailed', required: false, description: 'Toggle to get more details on payment',type:'boolean' })
   findAll(@Query('detailed') detailed?: string) {
     return this.paymentsService.findAll(detailed==='true');
   }
   
   @Get(':id')
   @ApiOperation({summary:'get payment by id'})
-  @ApiQuery({type:'detailed',required:false,description:'Toggle to get more details on payment'})
+  @ApiQuery({name:'detailed',required:false,description:'Toggle to get more details on payment',type:'boolean'})
   findOne(@Param('id') id: string,@Query('detailed') detailed:string) {
     return this.paymentsService.findOne(id,detailed==='true');
   }

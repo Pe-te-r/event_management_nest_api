@@ -29,19 +29,14 @@ export class RedisThrottlerStorage implements ThrottlerStorage {
     ttl: number,
     limit: number,
     blockDuration: number,
-    // throttlerName: string,
   ): Promise<ThrottlerStorageRecord> {
     const now = Date.now();
 
     await this.redis.rpush(key, now.toString());
-    // await this.redis.expire(key, ttl);
     await this.redis.expire(key, Math.ceil(ttl / 1000));
 
 
     const count = await this.redis.llen(key);
-    const timeLeft = await this.redis.ttl(key); 
-
-    console.log('here',ttl)
 
     const isBlocked = count > limit;
 
