@@ -43,27 +43,31 @@ export class UsersController {
   @ApiOperation({ summary: 'Get all users' })
   @ApiQuery({ name: 'limit', required: false, type: 'number', description: 'The number of users require to be retrived' })
   @ApiQuery({ name: 'email', required: false, type: 'string', description: 'Required when searching for user by email' })
+  @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default: false, description: 'Get users details with more info' })
   async findAll(
-    @Query() param?: { email: string; limit: number },
+    @Query() param?: { email: string; limit: number, detailed?: string },
   ): Promise<ApiResponse<User[] | User>> {
     const limit = param?.limit ?? 10;
-    console.log(param)
     if (param?.email) {
-      return await this.usersService.findAll(Number(limit), param?.email);
+      return await this.usersService.findAll(Number(limit),param?.detailed === 'true',param?.email);
     }
-    return await this.usersService.findAll(Number(limit));
+    return await this.usersService.findAll(Number(limit), param?.detailed==='true');
   }
 
 
   @Get(':id')
+  @Roles(RoleEnum.ADMIN,RoleEnum.USER)
   @ApiOperation({ summary: 'Get users by id' })
   @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default: false, description: 'Get user details with more info' })
   findOne(
     @Param('id') id: string,
     @UserD('sub') token_id:string,
+    @UserD('role') role: RoleEnum,
     @Query('detailed') detailed?: string,
   ): Promise<ApiResponse<User | null>> {
-    console.log(token_id)
+    if (token_id !== id && role != RoleEnum.ADMIN) {
+      throw new ForbiddenException('You are not allowed to access this resource that are not yours');
+    }
     return this.usersService.findOne(id, detailed === 'true');
   }
 
@@ -76,7 +80,6 @@ export class UsersController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete users by id' })
   remove(@Param('id') id: string) {
-    console.log(typeof (id));
     return this.usersService.remove(id);
   }
 

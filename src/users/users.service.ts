@@ -32,46 +32,118 @@ export class UsersService {
     };
   }
 
-  async findAll(limit: number, email?: string): Promise<ApiResponse<User[] | User>> {
-
+  async findAll(limit: number, detailed?: boolean, email?: string): Promise<ApiResponse<User[] | User>> {
+    console.log(detailed)
+    // return user by email
     if (email) {
-      const user = await this.userRepository.findOne({
-        where: { email: email },
-        select:['id','first_name','last_name','email','phone','role','createAt','updateAt']
-      })
-      if (!user) {
+      let users;
+      if (detailed) {
+        users = await this.userRepository
+          .createQueryBuilder('user')
+          .leftJoinAndSelect('user.payments', 'payment')
+          .leftJoinAndSelect('user.registeredEvents', 'registeredEvents')
+          .leftJoinAndSelect('user.createdEvents', 'createdEvent')
+          .leftJoinAndSelect('user.feedback', 'feedback')
+          .select([
+            'user.id',
+            'user.first_name',
+            'user.last_name',
+            'user.email',
+            'user.phone',
+            'user.role',
+            'user.createAt',
+            'user.updateAt',
+            'payment.payment_id',
+            'payment.amount',
+            'registeredEvents.registration_id',
+            'feedback.feedback_id',
+            'feedback.comments',
+          ])
+          .getMany();
+      } else {
+        
+        users=await this.userRepository.findOne({
+          where: { email: email },
+          select:['id','first_name','last_name','email','phone','role','createAt','updateAt']
+        })
+      }
+
+      if (!users) {
         throw new NotFoundException(`email ${email} not found`)
       }
       return {
         status: 'success',
         message: 'all users retrived',
-        data: user,
+        data: users,
       };
     }
-    const user = await this.userRepository.find({ take: limit })
-    if (user.length === 0) {
-      throw new NotFoundException('no user found')
+
+    let users;
+    if (detailed) {
+      users = await this.userRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.payments', 'payment')
+        .leftJoinAndSelect('user.registeredEvents', 'registeredEvents')
+        .leftJoinAndSelect('user.feedback', 'feedback')
+        .select([
+          'user.id',
+          'user.first_name',
+          'user.last_name',
+          'user.email',
+          'user.phone',
+          'user.role',
+          'user.createAt',
+          'user.updateAt',
+          'payment.payment_id',
+          'payment.amount',
+          'payment.payment_method',
+          'payment.payment_status',
+          'registeredEvents.registration_id',
+          'registeredEvents.registration_date',
+          'registeredEvents.payment_status',
+          'feedback.feedback_id',
+          'feedback.rating',
+          'feedback.comments',
+        ])
+        .getMany();
+    } else {
+      users = await this.userRepository.find({ take: limit })
     }
+      if (users.length === 0) {
+        throw new NotFoundException('no users found')
+      }
     return {
       status: 'success',
       message: 'all users retrived',
-      data: user,
+      data: users,
     };
   }
 
   async findOne(id: string, detailed: boolean = false): Promise<ApiResponse<User | null>> {
     if (detailed) {
-      
-      const foundUser = await this.userRepository.findOne({
-        where: { id: id },
-        select: ['id', 'first_name', 'last_name', 'email', 'phone', 'role', 'createAt', 'updateAt'],
-        relations: {
-          feedback: {},
-          payments: true,
-          registeredEvents: true,
-          createdEvents: true
-        }
-      })
+      const foundUser = await this.userRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.payments', 'payment')
+        .leftJoinAndSelect('user.registeredEvents', 'registeredEvents')
+        .leftJoinAndSelect('user.createdEvents', 'createdEvent')
+        .leftJoinAndSelect('user.feedback', 'feedback')
+        .select([
+          'user.id',
+          'user.first_name',
+          'user.last_name',
+          'user.email',
+          'user.phone',
+          'user.role',
+          'user.createAt',
+          'user.updateAt',
+          'payment.payment_id',
+          'payment.amount',
+          'registeredEvents.registration_id',
+          'feedback.feedback_id',
+          'feedback.comments',
+        ])
+        .where('user.id = :id', { id })
+        .getOne();
       return {
         status: 'success',
         message: `User with id ${id} retrived`,
