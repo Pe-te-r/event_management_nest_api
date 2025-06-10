@@ -72,14 +72,21 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @Roles(RoleEnum.ADMIN, RoleEnum.USER)
   @ApiOperation({ summary: 'Update users by id' })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @UserD('sub') token_id: string,@UserD('role') role: RoleEnum,) {
+    if (token_id !== id && role != RoleEnum.ADMIN) {
+      throw new ForbiddenException('You are not allowed to access this resource that are not yours');
+    }
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete users by id' })
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @UserD('sub') token_id: string, @UserD('role') role: RoleEnum,) {
+    if (token_id !== id && role != RoleEnum.ADMIN) {
+      throw new ForbiddenException('You are not allowed to access this resource that are not yours');
+    }
     return this.usersService.remove(id);
   }
 

@@ -14,7 +14,43 @@ export class PaymentsService {
     @InjectRepository(Payment) private paymentRepository: Repository<Payment>,
     @InjectRepository(EventRegistration) private registrationRepository: Repository<EventRegistration>,
     @InjectRepository(User) private userRepository: Repository<User>,
-  ){}
+  ) { }
+  private async selectPayments(detailed: boolean) {
+    let payments
+    if (detailed) {
+      payments = await this.paymentRepository
+        .createQueryBuilder('payment')
+        .leftJoinAndSelect('payment.whichEvent', 'event')
+        .leftJoinAndSelect('payment.whoPaid', 'user')
+        .select([
+          'payment.payment_id',
+          'payment.amount',
+          'payment.payment_method',
+          'payment.payment_status',
+
+          // From related Event
+          'event.registration_id',
+          'event.payment_status',
+          'event.payment_amount',
+          'event.registration_date',
+
+          // From related User
+          'user.id',
+          'user.first_name',
+          'user.email'
+        ])
+        .getMany();
+    } else{
+      payments = await this.paymentRepository.find({
+        relations: {
+          whichEvent: true,
+          whoPaid: true,
+        }
+      })
+    }
+
+    return payments
+  }
   // ✅ CREATE payment
   async create(createPaymentDto: CreatePaymentDto) {
     const registration = await this.registrationRepository.findOne({
@@ -45,28 +81,7 @@ export class PaymentsService {
 
   async findAll(detailed:boolean=false) {
     if (detailed) {
-      const payments =await this.paymentRepository.find({
-        relations: {
-          whichEvent: true,
-          whoPaid:true
-        }
-      })
-      // const payments = await this.paymentRepository
-      //   .createQueryBuilder('payment')
-      //   .leftJoinAndSelect('payment.whichEvent', 'event')
-      //   .leftJoinAndSelect('payment.whoPaid', 'user')
-      //   .select([
-      //     'payment.payment_id',
-      //     'payment.amount',
-      //     // 'payment.status',
-      //     // 'payment.createdAt',
-      //     'event.id',
-      //     'event.title',      
-      //     'user.id',
-      //     'user.first_name',  
-      //     'user.email',
-      //   ])
-      //   .getMany();
+      const payments = await this.selectPayments(detailed)
           if (payments.length === 0) {
         throw new NotFoundException(['no payments detail found'])
       }
