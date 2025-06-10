@@ -15,7 +15,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { ApiResponse } from 'src/responseType';
-import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorator/public.decorator';
 import { RoleEnum } from 'src/common/types/enums';
 import { RolesGuard } from 'src/auth/guards/role.guard';
@@ -24,6 +24,7 @@ import { UserD } from 'src/auth/decorator/user.decorator';
 
 
 @Controller('users')
+@ApiTags('Users')
 @UseGuards(RolesGuard)
 @ApiBearerAuth('JWT-auth')
 export class UsersController {
