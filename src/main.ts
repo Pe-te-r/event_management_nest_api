@@ -11,9 +11,6 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(helmet())
   app.enableCors()
-  app.useStaticAssets(join(__dirname, '..', 'assets'), {
-    prefix: '/assets/',
-  });
 
   const config = new DocumentBuilder()
     .setTitle('Event Notification')

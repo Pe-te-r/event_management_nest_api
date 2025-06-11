@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Management API</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>🎉 Event Management System API</h1>
+    <p>This API allows you to manage events, users, registrations, feedback, and more — built for organizers, attendees,
+      and admins.</p>
+
+    <div class="links">
+      <a href="/docs" class="button">📘 View Swagger Docs</a>
+      <a href="https://github.com/Pe-te-r/event_management_nest_api" target="_blank" class="button secondary">🌐 GitHub Source</a>
+    </div>
+
+    <section>
+      <h2>📌 API Modules</h2>
+      <ul>
+        <li><strong>/auth</strong> — Login, Register, Token Refresh</li>
+        <li><strong>/users</strong> — CRUD users (admin only)</li>
+        <li><strong>/events</strong> — Create, Update, Delete (admin/organizer), View (public)</li>
+        <li><strong>/events_registration</strong> — Register for events, View registrations</li>
+        <li><strong>/feedbacks</strong> — Submit/view feedback for events</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🔐 Access Control</h2>
+      <ul>
+        <li><strong>Admin</strong> — Manage users, events, and feedback</li>
+        <li><strong>Organizer</strong> — Create and manage own events</li>
+        <li><strong>Authenticated Users</strong> — Register and give feedback</li>
+        <li><strong>Guests</strong> — View events</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>
+        © 2025 Event API | Built with ❤️ using <strong>NestJS</strong> by
+        <a href="https://portfolio-peters-projects-79634003.vercel.app/" target="_blank" rel="noopener noreferrer">
+          Phantom 
+        </a>
+      </p>
+    </footer>
+    
+  </div>
+</body>
+
+</html>

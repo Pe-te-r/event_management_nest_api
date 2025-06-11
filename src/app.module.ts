@@ -16,6 +16,9 @@ import { AtGuard } from './auth/guards';
 import { seconds, ThrottlerGuard, ThrottlerModule, ThrottlerStorageService } from '@nestjs/throttler';
 import { EmailThrottlerGuard } from './auth/rate-limter/email-throtter';
 import { RedisThrottlerStorage } from './auth/rate-limter/redis-storage';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
 
 
 
@@ -55,6 +58,12 @@ import { RedisThrottlerStorage } from './auth/rate-limter/redis-storage';
         storage: new RedisThrottlerStorage(config),
       }),
     }),
+    
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'), // path to index.html
+      exclude: ['/api*', '/docs*'], // Let Nest handle those
+    }),
+
     DatabaseModule,
     AuthModule,
     UsersModule,
