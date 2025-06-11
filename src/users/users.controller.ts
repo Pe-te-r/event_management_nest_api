@@ -31,7 +31,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
   @Public()
   @Post()
-  @ApiOperation({ summary: 'Create a new user' })
+  @ApiOperation({ summary: 'Create a new user (registration route)' })
   create(@Body() createUserDto: CreateUserDto) {
     console.log(createUserDto);
     return this.usersService.create(createUserDto);
@@ -40,7 +40,7 @@ export class UsersController {
   // this about getting all users
   @Roles(RoleEnum.ADMIN)
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Get all users (done by admin)' })
   @ApiQuery({ name: 'limit', required: false, type: 'number', description: 'The number of users require to be retrived' })
   @ApiQuery({ name: 'email', required: false, type: 'string', description: 'Required when searching for user by email' })
   @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default: false, description: 'Get users details with more info' })
@@ -56,8 +56,8 @@ export class UsersController {
 
 
   @Get(':id')
-  @Roles(RoleEnum.ADMIN,RoleEnum.USER)
-  @ApiOperation({ summary: 'Get users by id' })
+  @Roles(RoleEnum.ADMIN, RoleEnum.ADMIN, RoleEnum.ORGANIZER)
+  @ApiOperation({ summary: 'Get users by id ' })
   @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default: false, description: 'Get user details with more info' })
   findOne(
     @Param('id') id: string,
@@ -72,7 +72,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @Roles(RoleEnum.ADMIN, RoleEnum.USER)
+  @Roles(RoleEnum.ADMIN, RoleEnum.ADMIN, RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Update users by id' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @UserD('sub') token_id: string,@UserD('role') role: RoleEnum,) {
     if (token_id !== id && role != RoleEnum.ADMIN) {
@@ -82,6 +82,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles(RoleEnum.ADMIN,RoleEnum.ADMIN,RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Delete users by id' })
   remove(@Param('id') id: string, @UserD('sub') token_id: string, @UserD('role') role: RoleEnum,) {
     if (token_id !== id && role != RoleEnum.ADMIN) {
