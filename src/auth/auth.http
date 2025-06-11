@@ -1,7 +1,7 @@
 @url=http://localhost:3000
 
 @access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5MTE4MDIwLCJleHAiOjE3NDkxMTkyMjB9.xzsYdDyPKrxCnbJ87NoQxQAEaY_eCHTrrO3GNWJ-ACI"
-@refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5MTE4MDIwLCJleHAiOjE3NDk0NjM2MjB9.QOiPbtX0-7qd6cGSoiAaYkZlxrQ9-B4rZR5-PyDo4xg
+@refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MGExNzI1NC1kZTRjLTQ0NjItOGVhZi0wZWRkMmU5MmQwN2UiLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ5NjQzNzMyLCJleHAiOjE3NDk2NDQ5MzJ9.yX2N1eRazOcdfh7OGwVvYpUsSk0kDJbujAasm9hT6NE
 ###
 POST  {{url}}/auth/login
 Content-Type: application/json
@@ -26,6 +26,6 @@ Content-Type: application/json
 Authorization: Bearer  {{refresh_token}}
 
 {
-  "token": "{{refresh_token}}"
+  "refresh_token": "{{refresh_token}}"
 }
 

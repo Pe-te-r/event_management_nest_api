@@ -34,8 +34,8 @@ export class EventsService {
         .select([
           'events.event_id',
           'events.event_name',
-          'event.event_date',
-          'event.event_description',
+          'events.event_date',
+          'events.event_description',
           'feedbacks.feedback_id',
           'feedbacks.rating',
           'feedbacks.comments',
