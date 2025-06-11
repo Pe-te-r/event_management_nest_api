@@ -14,7 +14,6 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorator/public.decorator';
 
-@Public()
 @ApiTags('Payments')
 @ApiBearerAuth('JWT-auth')
 @Controller('payments')

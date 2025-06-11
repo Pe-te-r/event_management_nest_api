@@ -44,7 +44,8 @@ This API provides comprehensive **event management** functionalities, including:
     .addTag('Users','Users endpoints managements')
     .addTag('Events','Events endpoints managements')
     .addTag('Payments','Payments endpoints managements')
-    .addTag('Registration','Event Registration endpoints managements')
+    .addTag('Registration', 'Event Registration endpoints managements')
+    .addServer('http://localhost:3000','localhost server')
     .addBearerAuth({
       type: 'http',
       scheme: 'bearer',
@@ -59,6 +60,7 @@ This API provides comprehensive **event management** functionalities, including:
     swaggerOptions: {
       persistAuthorization: true,
       filter: true,
+      tagsSorter: 'alpha',
       docExpansion: 'none',
       requestInterceptor: (req) => {
         if (req.headers?.Authorization) {

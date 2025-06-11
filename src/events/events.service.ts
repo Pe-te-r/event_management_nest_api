@@ -24,6 +24,10 @@ export class EventsService {
     return 'This action adds a new event';
   }
 
+  private async getEvents(detailed: boolean) {
+    
+  }
+
   async findAll(detailed:boolean=false): Promise<ApiResponse<Event[] | null>> {
     if (detailed) {
       const events = await this.eventRepository.find({
