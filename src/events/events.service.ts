@@ -24,15 +24,59 @@ export class EventsService {
     return 'This action adds a new event';
   }
 
-  private async getEvents(detailed: boolean) {
-    
+  private async getEvents(detailed: boolean,id:string | null=null) {
+    let events;
+    if(detailed && !id) {
+      events = await this.eventRepository
+        .createQueryBuilder('events')
+        .leftJoinAndSelect('events.feedbacks', 'feedbacks')
+        .leftJoinAndSelect('events.registrations', 'registrations')
+        .select([
+          'events.event_id',
+          'events.event_name',
+          'event.event_date',
+          'event.event_description',
+          'feedbacks.feedback_id',
+          'feedbacks.rating',
+          'feedbacks.comments',
+          'registrations.registration_id',
+          'registrations.registration_date',
+          'registrations.payment_status',
+          'registrations.payment_amount',
+        ]).getMany();
+    } else if (detailed && id) {
+      events = await this.eventRepository
+        .createQueryBuilder('events')
+        .leftJoinAndSelect('events.feedbacks', 'feedbacks')
+        .leftJoinAndSelect('events.registrations', 'registrations')
+        .select([
+          'events.event_id',
+          'events.event_name',
+          'event.event_date',
+          'event.event_description',
+          'feedbacks.feedback_id',
+          'feedbacks.rating',
+          'feedbacks.comments',
+          'registrations.registration_id',
+          'registrations.registration_date',
+          'registrations.payment_status',
+          'registrations.payment_amount',
+        ])
+        .where('events.event_id=:id',{id})
+        .getOne();
+    } else if (!detailed && id) {
+      events = await this.eventRepository.findOne({
+        where: { event_id: id }
+      })
+    } else {
+      events = await this.eventRepository.find()
+    }
+    return events;
   }
 
   async findAll(detailed:boolean=false): Promise<ApiResponse<Event[] | null>> {
     if (detailed) {
-      const events = await this.eventRepository.find({
-        relations: { feedbacks: true, registrations: true }
-      })
+      const events = await this.getEvents(detailed);
       if (!events) {
         throw new NotFoundException('no events found')
       }
