@@ -30,7 +30,7 @@ export class EventsService {
       events = await this.eventRepository
         .createQueryBuilder('events')
         .leftJoinAndSelect('events.feedbacks', 'feedbacks')
-        .leftJoinAndSelect('events.registrations', 'registrations')
+        .leftJoin('events.registrations', 'registrations')
         .select([
           'events.event_id',
           'events.event_name',
@@ -39,40 +39,105 @@ export class EventsService {
           'feedbacks.feedback_id',
           'feedbacks.rating',
           'feedbacks.comments',
-          'registrations.registration_id',
-          'registrations.registration_date',
-          'registrations.payment_status',
-          'registrations.payment_amount',
-        ]).getMany();
+          'COUNT(registrations.registration_id) AS registration_count',
+          'AVG(feedbacks.rating) AS average_rating',
+        ])
+        .groupBy('events.event_id')
+        .addGroupBy('feedbacks.feedback_id')
+        .addGroupBy('events.event_name')
+        .addGroupBy('events.event_date')
+        .addGroupBy('events.event_description')
+        .addGroupBy('feedbacks.rating')
+        .addGroupBy('feedbacks.comments')
+        .getRawMany();
     } else if (detailed && id) {
-      events = await this.eventRepository
+      const rawRows = await this.eventRepository
         .createQueryBuilder('events')
         .leftJoinAndSelect('events.feedbacks', 'feedbacks')
-        .leftJoinAndSelect('events.registrations', 'registrations')
+        .leftJoin('events.registrations', 'registrations')
         .select([
           'events.event_id',
           'events.event_name',
-          'event.event_date',
-          'event.event_description',
+          'events.event_date',
+          'events.event_description',
           'feedbacks.feedback_id',
           'feedbacks.rating',
           'feedbacks.comments',
-          'registrations.registration_id',
-          'registrations.registration_date',
-          'registrations.payment_status',
-          'registrations.payment_amount',
+          'COUNT(registrations.registration_id) AS registration_count',
+          'AVG(feedbacks.rating) AS average_rating',
         ])
-        .where('events.event_id=:id',{id})
-        .getOne();
-    } else if (!detailed && id) {
+        .where('events.event_id = :id', { id })
+        .groupBy('events.event_id')
+        .addGroupBy('feedbacks.feedback_id')
+        .addGroupBy('events.event_name')
+        .addGroupBy('events.event_date')
+        .addGroupBy('events.event_description')
+        .addGroupBy('feedbacks.rating')
+        .addGroupBy('feedbacks.comments')
+        .getRawMany();
+
+      if (rawRows.length === 0) {
+        events = null;
+      } else {
+        events = {
+          event_id: rawRows[0].events_event_id,
+          event_name: rawRows[0].events_event_name,
+          event_date: rawRows[0].events_event_date,
+          event_description: rawRows[0].events_event_description,
+          registration_count: Number(rawRows[0].registration_count),
+          average_rating: parseFloat(Number(rawRows[0].average_rating).toFixed(2)),
+          feedbacks: []
+        };
+        
+        console.log(events)
+        rawRows.forEach(row => {
+          if (row.feedbacks_feedback_id) {
+            events.feedbacks.push({
+              feedback_id: row.feedbacks_feedback_id,
+              rating: row.feedbacks_rating,
+              comments: row.feedbacks_comments
+            });
+          }
+        });
+      }
+      return events;
+    }
+    else if (!detailed && id) {
       events = await this.eventRepository.findOne({
         where: { event_id: id }
       })
     } else {
       events = await this.eventRepository.find()
     }
-    return events;
-  }
+
+    const grouped = new Map();
+
+    events.forEach(row => {
+      const eventId = row.events_event_id;
+
+      if (!grouped.has(eventId)) {
+        grouped.set(eventId, {
+          event_id: row.events_event_id,
+          event_name: row.events_event_name,
+          event_date: row.events_event_date,
+          event_description: row.events_event_description,
+          registration_count: Number(row.registration_count),
+          average_rating: parseFloat(Number(row.average_rating).toFixed(2)),
+          feedbacks: []
+        });
+      }
+
+      // Push feedback if it exists
+      if (row.feedbacks_feedback_id) {
+        grouped.get(eventId).feedbacks.push({
+          feedback_id: row.feedbacks_feedback_id,
+          rating: row.feedbacks_rating,
+          comments: row.feedbacks_comments
+        });
+      }
+    });
+
+    return Array.from(grouped.values());  }
 
   async findAll(detailed:boolean=false): Promise<ApiResponse<Event[] | null>> {
     if (detailed) {
@@ -99,12 +164,9 @@ export class EventsService {
     }
   }
 
-  async findOne(id: string,detailed:boolean=false): Promise<ApiResponse<Event | null>> {
+  async findOne(id: string,detailed:boolean=false) {
     if (detailed) {
-      const event = await this.eventRepository.findOne({
-        where: { event_id: id },
-        relations: { feedbacks: true, registrations: true }
-      })
+      const event = await this.getEvents(detailed, id);
       if (!event) {
         throw new NotFoundException(`Event with id ${id} not found`);
       }
@@ -115,9 +177,7 @@ export class EventsService {
       }
 
     }
-    const event =await this.eventRepository.findOne({
-      where:{event_id:id}
-    })
+    const event = await this.getEvents(detailed, id);
     if (!event) {
       throw new NotFoundException(`Event with id ${id} not found`);
     }
