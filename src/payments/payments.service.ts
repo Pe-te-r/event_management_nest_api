@@ -15,7 +15,7 @@ export class PaymentsService {
     @InjectRepository(EventRegistration) private registrationRepository: Repository<EventRegistration>,
     @InjectRepository(User) private userRepository: Repository<User>,
   ) { }
-  private async selectPayments(detailed: boolean) {
+  private async selectPayments(detailed: boolean,id:string | null=null) {
     let payments
     if (detailed) {
       payments = await this.paymentRepository
@@ -40,7 +40,40 @@ export class PaymentsService {
           'user.email'
         ])
         .getMany();
-    } else{
+    } else if (id && detailed) {
+      payments = await this.paymentRepository
+        .createQueryBuilder('payment')
+        .leftJoinAndSelect('payment.whichEvent', 'event')
+        .leftJoinAndSelect('payment.whoPaid', 'user')
+        .select([
+          'payment.payment_id',
+          'payment.amount',
+          'payment.payment_method',
+          'payment.payment_status',
+
+          // From related Event
+          'event.registration_id',
+          'event.payment_status',
+          'event.payment_amount',
+          'event.registration_date',
+
+          // From related User
+          'user.id',
+          'user.first_name',
+          'user.email'
+        ])
+        .where({ 'payment.payment_id':id})
+        .getOne();
+    } else if (id && !detailed) {
+      payments = await this.paymentRepository.find({
+        where:{payment_id:id},
+        relations: {
+          whichEvent: true,
+          whoPaid: true,
+        }
+      })
+    }
+    else {
       payments = await this.paymentRepository.find({
         relations: {
           whichEvent: true,
@@ -51,6 +84,7 @@ export class PaymentsService {
 
     return payments
   }
+  
   // ✅ CREATE payment
   async create(createPaymentDto: CreatePaymentDto) {
     const registration = await this.registrationRepository.findOne({
@@ -103,14 +137,8 @@ export class PaymentsService {
 }
 
  async findOne(id: string,detailed:boolean=false) {
-    if (detailed) {
-      const payments =await this.paymentRepository.findOne({
-        where:{payment_id:id},
-        relations: {
-          whichEvent: true,
-          whoPaid: true
-        }
-      })
+   if (detailed) {
+     const payments = await this.selectPayments(detailed, id);
       if (!payments) {
         throw new NotFoundException(['no payments detail found'])
       }

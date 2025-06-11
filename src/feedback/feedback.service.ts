@@ -14,7 +14,66 @@ export class FeedbackService {
     @InjectRepository(Feedback) private feedbackRepository:Repository<Feedback>,
     @InjectRepository(User) private userRepository:Repository<User>,
     @InjectRepository(Event) private eventRepository:Repository<Event>,
-  ){}
+  ) { }
+  private async selectFeedback(detailed: boolean, id: string | null = null) {
+    let feedback;
+
+    if (detailed && !id) {
+      feedback = await this.feedbackRepository
+        .createQueryBuilder('feedback')
+        .leftJoinAndSelect('feedback.owner', 'user')
+        .leftJoinAndSelect('feedback.event', 'event')
+        .select([
+          'feedback.feedback_id',
+          'feedback.rating',
+          'feedback.comments',
+
+          // Related User
+          'user.id',
+          'user.first_name',
+          'user.email',
+
+          // Related Event
+          'event.event_id',
+          'event.event_name'
+        ])
+        .getMany();
+
+    } else if (detailed && id) {
+      feedback = await this.feedbackRepository
+        .createQueryBuilder('feedback')
+        .leftJoinAndSelect('feedback.owner', 'user')
+        .leftJoinAndSelect('feedback.event', 'event')
+        .select([
+          'feedback.feedback_id',
+          'feedback.rating',
+          'feedback.comments',
+
+          // Related User
+          'user.id',
+          'user.first_name',
+          'user.email',
+
+          // Related Event
+          'event.event_id',
+          'event.event_name'
+        ])
+        .where('feedback.feedback_id = :id', { id })
+        .getOne();
+
+    } else if (!detailed && id) {
+      feedback = await this.feedbackRepository.findOne({
+        where: { feedback_id: id },
+      });
+
+    } else {
+      feedback = await this.feedbackRepository.find();
+    }
+
+    return feedback;
+  }
+
+  
   async create(createFeedbackDto: CreateFeedbackDto): Promise<ApiResponse<Feedback>> {
     const { event_id, user_id, rating, comments } = createFeedbackDto;
     const event = await this.eventRepository.findOne({where:{event_id:event_id}})
@@ -41,14 +100,17 @@ export class FeedbackService {
   }
   
 
-  async findAll(detailed:boolean=false) {
+  async findAll(detailed: boolean = false) {
+    console.log(detailed)
+    console.log('here')
     if (detailed) {
-          const all_registrations = await this.feedbackRepository.find({
-            relations: {
-              owner: true,
-              event:true,
-            }
-          })
+      const all_registrations = await this.selectFeedback(detailed)
+          // const all_registrations = await this.feedbackRepository.find({
+          //   relations: {
+          //     owner: true,
+          //     event:true,
+          //   }
+          // })
       if (all_registrations.length == 0) {
         throw new NotFoundException('no feedback found');
       }
@@ -59,7 +121,8 @@ export class FeedbackService {
         data: all_registrations
         }
     }
-        const all_registrations = await this.feedbackRepository.find()
+        // const all_registrations = await this.feedbackRepository.find()
+    const all_registrations = await this.selectFeedback(detailed)
         if (all_registrations.length == 0) {
           throw new NotFoundException('no feedback found');
         }
@@ -72,13 +135,7 @@ export class FeedbackService {
 
   async findOne(id: string, detailed: boolean = false): Promise<ApiResponse<Feedback | null>> {
     if (detailed) {
-      const feedbackFound = await this.feedbackRepository.findOne({
-        where: { feedback_id: id },
-        relations: {
-          owner: true,
-          event: true,
-        }
-      })
+      const feedbackFound = await this.selectFeedback(detailed);
       if (!feedbackFound) {
         throw new NotFoundException(`comment id ${id} not found`)
       }
@@ -88,9 +145,7 @@ export class FeedbackService {
         data: feedbackFound
       }
     }
-    const feedbackFound = await this.feedbackRepository.findOne({
-      where: { feedback_id: id }
-    })
+    const feedbackFound = await this.selectFeedback(detailed, id);
     if (!feedbackFound) {
       throw new NotFoundException(`comment id ${id} not found`)
     }
