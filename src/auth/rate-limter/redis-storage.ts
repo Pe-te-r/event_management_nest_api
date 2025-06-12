@@ -23,7 +23,6 @@ export class RedisThrottlerStorage implements ThrottlerStorage {
     await this.redis.rpush(key, now.toString());
     await this.redis.expire(key, ttl);
   }
-
   async increment(
     key: string,
     ttl: number,
