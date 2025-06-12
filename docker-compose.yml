@@ -1,0 +1,47 @@
+version: '3.8'
+
+services: 
+  postgres:
+    image: postgres:16
+    container_name: postgres_service
+    restart: always
+    env_file:
+      - .env.development
+    environment:
+      POSTGRES_USER: phantom
+      POSTGRES_PASSWORD: phantom@8526
+      POSTGRES_DB: event_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: redis_service
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  nestjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs_service
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env.development
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    command: ["pnpm", "start:prod"]
+
+volumes:
+  pg_data:
+  redis_data:
