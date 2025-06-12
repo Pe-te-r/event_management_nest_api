@@ -5,6 +5,8 @@ services:
     image: postgres:16
     container_name: postgres_service
     restart: always
+    env_file:
+      - .env.development
     environment:
       POSTGRES_USER: phantom
       POSTGRES_PASSWORD: phantom@8526
@@ -32,36 +34,13 @@ services:
     depends_on:
       - postgres
       - redis
-    environment:
-      # DB CONFIG
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: phantom
-      DB_PASSWORD: phantom@8526
-      DB_NAME: event_management
-      DB_SYNC: "true"
-      DB_LOGGING: "true"
-
-      # REDIS
-      REDIS_URL: redis://redis:6379
-
-      # JWT
-      JWT_ACCESS_TOKEN_SECRET: "this is a secret key"
-      JWT_REFRESH_TOKEN_SECRET: "this is a secret key"
-      JWT_ACCESS_TOKEN_EXPIRATION_TIME: 2h
-      JWT_REFRESH_TOKEN_EXPIRATION_TIME: 4d
-
-      # RATE LIMIT
-      THROTTLE_TTL: 60
-      THROTTLE_LIMIT: 45
-
+    env_file:
+      - .env.development
     ports:
       - "3000:3000"
     volumes:
       - .:/app
-    # command: ["pnpm", "start:prod"]
-    command: ["sh", "-c", "pnpm wait-for postgres:5432 && pnpm wait-for redis:6379 && pnpm start:prod"]
-
+    command: ["pnpm", "start:prod"]
 
 volumes:
   pg_data:
