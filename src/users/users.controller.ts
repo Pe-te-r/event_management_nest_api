@@ -26,7 +26,6 @@ import { UserD } from 'src/auth/decorator/user.decorator';
 @Controller('users')
 @ApiTags('Users')
 @UseGuards(RolesGuard)
-@ApiBearerAuth('JWT-auth')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
   @Public()
@@ -36,9 +35,10 @@ export class UsersController {
     console.log(createUserDto);
     return this.usersService.create(createUserDto);
   }
-
+  
   // this about getting all users
   @Roles(RoleEnum.ADMIN)
+  @ApiBearerAuth('JWT-auth')
   @Get()
   @ApiOperation({ summary: 'Get all users (done by admin)' })
   @ApiQuery({ name: 'limit', required: false, type: 'number', description: 'The number of users require to be retrived' })
@@ -53,9 +53,10 @@ export class UsersController {
     }
     return await this.usersService.findAll(Number(limit), param?.detailed==='true');
   }
-
-
+  
+  
   @Get(':id')
+  @ApiBearerAuth('JWT-auth')
   @Roles(RoleEnum.ADMIN, RoleEnum.ADMIN, RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Get users by id ' })
   @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default: false, description: 'Get user details with more info' })
@@ -70,8 +71,9 @@ export class UsersController {
     }
     return this.usersService.findOne(id, detailed === 'true');
   }
-
+  
   @Patch(':id')
+  @ApiBearerAuth('JWT-auth')
   @Roles(RoleEnum.ADMIN, RoleEnum.ADMIN, RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Update users by id' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @UserD('sub') token_id: string,@UserD('role') role: RoleEnum,) {
@@ -80,8 +82,9 @@ export class UsersController {
     }
     return this.usersService.update(id, updateUserDto);
   }
-
+  
   @Delete(':id')
+  @ApiBearerAuth('JWT-auth')
   @Roles(RoleEnum.ADMIN,RoleEnum.ADMIN,RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Delete users by id' })
   remove(@Param('id') id: string, @UserD('sub') token_id: string, @UserD('role') role: RoleEnum,) {

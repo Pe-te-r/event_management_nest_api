@@ -12,17 +12,17 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
   ) { }
-    private async hashData(password: string): Promise<string> {
-      const saltRounds = 10;
-      return await bcrypt.hash(password, saltRounds);
-    }
-    
+  private async hashData(password: string): Promise<string> {
+    const saltRounds = 10;
+    return await bcrypt.hash(password, saltRounds);
+  }
+
   async create(createUserDto: CreateUserDto): Promise<ApiResponse<undefined>> {
     const email_found = await this.userRepository.findOne({ where: { email: createUserDto.email } })
     if (email_found) {
       throw new ConflictException(`the user email ${email_found.email} already exits`)
     }
-    createUserDto.password =await this.hashData(createUserDto.password)
+    createUserDto.password = await this.hashData(createUserDto.password)
     const newUser = this.userRepository.create(createUserDto)
     const savedUser = await this.userRepository.save(newUser)
 
@@ -61,10 +61,10 @@ export class UsersService {
           ])
           .getMany();
       } else {
-        
-        users=await this.userRepository.findOne({
+
+        users = await this.userRepository.findOne({
           where: { email: email },
-          select:['id','first_name','last_name','email','phone','role','createAt','updateAt']
+          select: ['id', 'first_name', 'last_name', 'email', 'phone', 'role', 'createAt', 'updateAt']
         })
       }
 
@@ -107,11 +107,16 @@ export class UsersService {
         ])
         .getMany();
     } else {
-      users = await this.userRepository.find({ take: limit })
+      users = await this.userRepository.find(
+        {
+          take: limit,
+          select: ['id', 'email', 'first_name', 'last_name', 'phone', 'role', 'createAt']
+        }
+      )
     }
-      if (users.length === 0) {
-        throw new NotFoundException('no users found')
-      }
+    if (users.length === 0) {
+      throw new NotFoundException('no users found')
+    }
     return {
       status: 'success',
       message: 'all users retrived',
@@ -150,7 +155,12 @@ export class UsersService {
         data: foundUser,
       };
     }
-    const foundUser = await this.userRepository.findOne({ where: { id: id } })
+    const foundUser = await this.userRepository.findOne(
+      {
+        where: { id: id },
+        select:['id','email','first_name','last_name','phone','role','createAt']
+      }
+    )
     if (!foundUser) {
       return {
         status: 'error',
@@ -182,8 +192,8 @@ export class UsersService {
       message: `This action updates a #${id} user`,
     };
   }
-  
-  
+
+
 
   async remove(id: string) {
     const foundUser = await this.userRepository.findOne({ where: { id: id } });
