@@ -18,6 +18,7 @@ import { EmailThrottlerGuard } from './auth/rate-limter/email-throtter';
 import { RedisThrottlerStorage } from './auth/rate-limter/redis-storage';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { MailModule } from './mailer/mailer.module';
 
 
 
@@ -71,6 +72,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     EventRegistrationsModule,
     FeedbackModule,
     PaymentsModule,
+    MailModule,
   ],
   controllers: [],
   providers: [

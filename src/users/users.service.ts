@@ -6,11 +6,13 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { MailService } from 'src/mailer/mailer.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly mailService: MailService
   ) { }
   private async hashData(password: string): Promise<string> {
     const saltRounds = 10;
@@ -25,6 +27,8 @@ export class UsersService {
     createUserDto.password = await this.hashData(createUserDto.password)
     const newUser = this.userRepository.create(createUserDto)
     const savedUser = await this.userRepository.save(newUser)
+    // send email
+    await this.mailService.sendUserRegistration(savedUser.first_name, savedUser.email);
 
     return {
       status: 'success',
@@ -33,7 +37,6 @@ export class UsersService {
   }
 
   async findAll(limit: number, detailed?: boolean, email?: string): Promise<ApiResponse<User[] | User>> {
-    console.log(detailed)
     // return user by email
     if (email) {
       let users;

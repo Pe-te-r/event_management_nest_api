@@ -1,0 +1,30 @@
+import { Module } from '@nestjs/common';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { join } from 'path';
+import { MailService } from './mailer.service';
+
+@Module({
+  imports: [
+    MailerModule.forRoot({
+      transport: {
+        host: 'localhost',  // MailDev
+        port: 1025,
+        secure: false,
+      },
+      defaults: {
+        from: '"No Reply" <event-api@example.com>',
+      },
+      template: {
+        dir: join(__dirname, 'templates/mailer/templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
+  ],
+  providers: [MailService],
+  exports: [MailService],
+})
+export class MailModule { }
