@@ -59,7 +59,9 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
-    command: ["pnpm", "start:prod"]
+    # command: ["pnpm", "start:prod"]
+    command: ["sh", "-c", "pnpm wait-for postgres:5432 && pnpm wait-for redis:6379 && pnpm start:prod"]
+
 
 volumes:
   pg_data:
