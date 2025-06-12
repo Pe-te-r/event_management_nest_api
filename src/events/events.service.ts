@@ -21,7 +21,10 @@ export class EventsService {
     })
     const savedEvent =await this.eventRepository.save(newEvent)
     console.log(savedEvent)
-    return 'This action adds a new event';
+    return {
+      status: 'success',
+      message: 'This action adds a new event'
+    }
   }
 
   private async getEvents(detailed: boolean,id:string | null=null) {
@@ -111,10 +114,11 @@ export class EventsService {
     }
 
     const grouped = new Map();
-
-    events.forEach(row => {
-      const eventId = row.events_event_id;
-
+    if (events.length > 1) {
+      
+      events.forEach(row => {
+        const eventId = row.events_event_id;
+        
       if (!grouped.has(eventId)) {
         grouped.set(eventId, {
           event_id: row.events_event_id,
@@ -136,8 +140,11 @@ export class EventsService {
         });
       }
     });
-
-    return Array.from(grouped.values());  }
+    return Array.from(grouped.values());
+    }
+    return events;
+  }
+    
 
   async findAll(detailed:boolean=false): Promise<ApiResponse<Event[] | null>> {
     if (detailed) {

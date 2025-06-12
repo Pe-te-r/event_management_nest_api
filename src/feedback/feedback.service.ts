@@ -74,8 +74,8 @@ export class FeedbackService {
   }
 
   
-  async create(createFeedbackDto: CreateFeedbackDto): Promise<ApiResponse<Feedback>> {
-    const { event_id, user_id, rating, comments } = createFeedbackDto;
+  async create(createFeedbackDto: CreateFeedbackDto,user_id:string): Promise<ApiResponse<Feedback>> {
+    const { event_id,  rating, comments } = createFeedbackDto;
     const event = await this.eventRepository.findOne({where:{event_id:event_id}})
     const user =await this.userRepository.findOne({ where: { id: user_id } })
     

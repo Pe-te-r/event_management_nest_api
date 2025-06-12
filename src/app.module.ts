@@ -13,7 +13,7 @@ import { CacheableMemory } from 'cacheable';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './auth/guards';
-import { seconds, ThrottlerGuard, ThrottlerModule, ThrottlerStorageService } from '@nestjs/throttler';
+import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { EmailThrottlerGuard } from './auth/rate-limter/email-throtter';
 import { RedisThrottlerStorage } from './auth/rate-limter/redis-storage';
 import { join } from 'path';
@@ -61,7 +61,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'), // path to index.html
-      exclude: ['/api*', '/docs*'], // Let Nest handle those
+      exclude: ['/api*', '/docs*'], 
     }),
 
     DatabaseModule,

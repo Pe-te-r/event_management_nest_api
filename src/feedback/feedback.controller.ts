@@ -16,6 +16,7 @@ import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { RolesGuard } from 'src/auth/guards/role.guard';
 import { Roles } from 'src/auth/decorator/role.decorator';
 import { RoleEnum } from 'src/common/types/enums';
+import { UserD } from 'src/auth/decorator/user.decorator';
 
 @Controller('feedbacks')
 @ApiTags('Feedback')
@@ -27,8 +28,8 @@ export class FeedbackController {
   @Post()
   @Roles(RoleEnum.USER)
   @ApiOperation({ summary:'create feedback (done by user)'})
-  create(@Body() createFeedbackDto: CreateFeedbackDto) {
-    return this.feedbackService.create(createFeedbackDto);
+  create(@Body() createFeedbackDto: CreateFeedbackDto,@UserD('sub') user_id: string) {
+    return this.feedbackService.create(createFeedbackDto,user_id);
   }
   
   @Get()

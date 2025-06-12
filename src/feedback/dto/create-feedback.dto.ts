@@ -6,11 +6,9 @@ export class CreateFeedbackDto {
   @IsUUID()
   event_id: string;
   @ApiProperty()
-  @IsUUID()
-  user_id: string;
   @ApiProperty()
   @IsNumber()
-  rating: string;
+  rating: number;
   @ApiProperty()
   @IsString()
   comments: string;
