@@ -16,7 +16,7 @@ export class CreateEventDto {
   @ApiProperty()
   @IsString()
   event_description: string;
-  @ApiProperty()
-  @IsUUID()
-  createdById: string;
+  // @ApiProperty()
+  // @IsUUID()
+  // createdById: string;
 }

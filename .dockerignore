@@ -1,0 +1,31 @@
+# Node modules (reinstall in container)
+node_modules
+dist
+
+# Dependency lock files (optional if you're using them in build)
+*.log
+*.tsbuildinfo
+
+# Environment files (security)
+.env
+.env.*
+
+# OS/Editor/System files
+.DS_Store
+Thumbs.db
+
+# Docker-related
+.dockerignore
+Dockerfile
+
+# Git and other VCS
+.git
+.gitignore
+
+# IDEs and editors
+.vscode
+.idea
+
+# Test and coverage output
+coverage
+test-results

@@ -11,11 +11,11 @@ export class EventsService {
   constructor(
     @InjectRepository(Event) private eventRepository: Repository<Event>,
   ){}
-  async create(createEventDto: CreateEventDto) {
+  async create(createEventDto: CreateEventDto, createdById:string) {
     const newEvent = this.eventRepository.create({
       event_name: createEventDto.event_name,
       event_date: createEventDto.event_date,
-      createdBy:{id: createEventDto.createdById},
+      createdBy:{id: createdById},
       event_location: createEventDto.event_location,
       event_description: createEventDto.event_description,
     })

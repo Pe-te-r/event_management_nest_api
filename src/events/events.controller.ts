@@ -17,6 +17,7 @@ import { RolesGuard } from 'src/auth/guards/role.guard';
 import { Roles } from 'src/auth/decorator/role.decorator';
 import { RoleEnum } from 'src/common/types/enums';
 import { Public } from 'src/auth/decorator/public.decorator';
+import { UserD } from 'src/auth/decorator/user.decorator';
 
 @Controller('events')
 @UseGuards(RolesGuard)
@@ -28,8 +29,9 @@ export class EventsController {
   @ApiBearerAuth('JWT-auth')
   @Roles(RoleEnum.ORGANIZER,RoleEnum.ADMIN)
   @ApiOperation({ summary:'create event (done by admin && organizer only)'})
-  create(@Body() createEventDto: CreateEventDto) {
-    return this.eventsService.create(createEventDto);
+  create(@Body() createEventDto: CreateEventDto, @UserD('sub') createdById: string) {
+    console.log('Event created by id', createdById);
+    return this.eventsService.create(createEventDto, createdById);
   }
   
   @Public()
