@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { CreateAuthDto, forgetDto } from './dto/create-auth.dto';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { CreateAuthDto, forgetDto, updatePasswordDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -197,5 +197,24 @@ export class AuthService {
       status: 'success',
       message:'Email sent for more info.'
     }
+  }
+  async update_password(updateData:updatePasswordDto) {
+    const user = await this.getUserOrFail(updateData.emaiL);
+    const isTempPasswordValid = await bcrypt.compare(updateData.temporaryPassword, user.new_password)
+    if (!isTempPasswordValid) {
+      throw new BadRequestException("Temporary password is incorrect.");
+    }
+    const hashed = await bcrypt.hash(updateData.newpassword, 10);
+
+    user.password = hashed
+    await this.userRepository.save(user);
+    await this.mailServer.updatePassword(user.email, user.first_name);
+
+    return {
+      status: 'success',
+      message: 'Password update success'
+    }
+    
+
   }
 }

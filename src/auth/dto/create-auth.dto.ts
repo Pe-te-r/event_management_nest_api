@@ -41,3 +41,29 @@ export class forgetDto{
   @IsString()
   email: string;
 }
+
+export class updatePasswordDto{
+  @ApiProperty({
+    description: 'email for the account being reset',
+    type:'string',
+    example:'example@gmail.com'
+  })
+  @IsNotEmpty()
+  @IsEmail()
+  emaiL: string;
+  @ApiProperty({
+    description: 'password sent to your email',
+    type: 'string'
+  })
+  @IsNotEmpty()
+  @IsString()
+  temporaryPassword: string;
+
+  @ApiProperty({
+    description: 'your new prefered password',
+    type: 'string'
+  })
+  @IsNotEmpty()
+  @IsString()
+  newpassword: string;
+}

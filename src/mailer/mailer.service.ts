@@ -41,5 +41,17 @@ export class MailService {
       },
     });
   }
+
+  async updatePassword(email:string,first_name:string) {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Your password has been updated',
+      template: 'password-update-success',
+      context: {
+        firstName: first_name,
+      },
+    });
+    
+  }
   
 }

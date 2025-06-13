@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Param, Get, UseGuards} from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, UseGuards, Patch} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto, forgetDto, RefreshDto } from './dto/create-auth.dto';
+import { CreateAuthDto, forgetDto, RefreshDto, updatePasswordDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Public } from './decorator/public.decorator';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -47,5 +47,13 @@ export class AuthController {
     
     return this.authService.send_forget_email(forgetData)
   }
+
+  @Public()
+  @Patch()
+  @ApiOperation({summary:'Send the new password  given with a new custom password'})
+  updatePassword(@Body() updateData: updatePasswordDto) {
+    return this.authService.update_password(updateData)
+  }
+
 
 }
