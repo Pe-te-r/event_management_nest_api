@@ -191,8 +191,9 @@ export class AuthService {
     // Save the updated user new password
     user.new_password = hashed;
     await this.userRepository.save(user);
-    
+    console.log('one')
     await this.mailServer.sendForgotPassword(user.email, tempPassword, user.first_name);
+    console.log('two')
     return {
       status: 'success',
       message:'Email sent for more info.'

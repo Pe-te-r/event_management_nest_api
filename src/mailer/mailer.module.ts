@@ -8,7 +8,8 @@ import { MailService } from './mailer.service';
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: 'localhost',  // MailDev
+
+        host: '192.168.137.175',  
         port: 1025,
         secure: false,
       },
