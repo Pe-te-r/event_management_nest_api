@@ -30,14 +30,16 @@ export class MailService {
     });
   }
 
-  async sendForgotPassword(email: string, resetLink: string) {
+  async sendForgotPassword(email: string, temporaryPassword: string, firstName: string) {
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Reset your password',
-      template: 'forgot-password',
+      subject: 'Your Temporary Password',
+      template: 'forgot-password', // this should match your .hbs file
       context: {
-        resetLink,
+        temporaryPassword,
+        firstName,
       },
     });
   }
+  
 }

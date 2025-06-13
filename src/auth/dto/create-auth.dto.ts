@@ -28,5 +28,16 @@ export class RefreshDto{
   @IsNotEmpty()
   @IsString()
   refresh_token: string;
+  
+}
 
+export class forgetDto{
+  @ApiProperty({
+    description: 'email for the password account to be reset',
+    type: 'string',
+    example:'phantom@gmail.com'
+  })
+  @IsNotEmpty()
+  @IsString()
+  email: string;
 }

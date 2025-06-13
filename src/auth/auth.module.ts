@@ -7,12 +7,14 @@ import { User } from 'src/users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { AtStrategy, RTStrategy } from './stategies';
 import { AtGuard, RtGuard } from './guards';
+import { MailModule } from 'src/mailer/mailer.module';
 
 @Module({
   imports: [
     DatabaseModule,
     TypeOrmModule.forFeature([User]),
-    JwtModule.register({global:true}),
+    JwtModule.register({ global: true }),
+    MailModule
    ],
   controllers: [AuthController],
   providers: [AuthService,

@@ -110,6 +110,9 @@ importers:
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      secrets:
+        specifier: ^1.1.5
+        version: 1.1.5
       swagger-ui-express:
         specifier: ^5.0.1
         version: 5.0.1(express@5.1.0)
@@ -4014,6 +4017,9 @@ packages:
   schema-utils@4.3.2:
     resolution: {integrity: sha512-Gn/JaSk/Mt9gYubxTtSn/QCV4em9mpAPiR1rqy/Ocu19u/G9J5WWdNoUT4SiV6mFC3y6cxyFcFwdzPM3FgxGAQ==}
     engines: {node: '>= 10.13.0'}
+
+  secrets@1.1.5:
+    resolution: {integrity: sha512-mRLug8yiqc+UzRYBq7F9e3d8HY/h1/8uMcGNmGUXcPBuC2x4njkPAaZc04+iOYaaapWRUU2M5tJTeq5Q6zCbIg==}
 
   seek-bzip@2.0.0:
     resolution: {integrity: sha512-SMguiTnYrhpLdk3PwfzHeotrcwi8bNV4iemL9tx9poR/yeaMYwB9VzR1w7b57DuWpuqR8n6oZboi0hj3AxZxQg==}
@@ -9293,6 +9299,8 @@ snapshots:
       ajv: 8.17.1
       ajv-formats: 2.1.1(ajv@8.17.1)
       ajv-keywords: 5.1.0(ajv@8.17.1)
+
+  secrets@1.1.5: {}
 
   seek-bzip@2.0.0:
     dependencies:

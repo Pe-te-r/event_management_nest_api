@@ -1,10 +1,11 @@
 import { Controller, Post, Body, Param, Get, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto, RefreshDto } from './dto/create-auth.dto';
+import { CreateAuthDto, forgetDto, RefreshDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { Public } from './decorator/public.decorator';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RtGuard } from './guards';
+import { UserD } from './decorator/user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -38,8 +39,13 @@ export class AuthController {
   refreshAccessTokenOnly(@Body() {refresh_token}: RefreshDto) {
     return this.authService.refreshAccessTokenOnly(refresh_token);
   }
-
   
-
+  @Public()
+  @Post('forget-password')
+  @ApiOperation({ summary: 'Will receive an email for further instructions on password reset' })
+  fogertPassword(@Body() forgetData: forgetDto) {
+    
+    return this.authService.send_forget_email(forgetData)
+  }
 
 }

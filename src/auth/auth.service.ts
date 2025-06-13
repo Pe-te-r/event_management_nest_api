@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { CreateAuthDto, forgetDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,14 +8,19 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { RoleEnum } from 'src/common/types/enums';
+import { MailService } from 'src/mailer/mailer.service';
+import { randomBytes } from 'crypto';
 
 
 @Injectable()
+  
+  
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private mailServer: MailService,
   ) { }
   private async getTokens(
     userId: string,
@@ -41,11 +46,22 @@ export class AuthService {
     };
   }
   
+  generateSecurePassword(length = 8): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = randomBytes(length);
+  let password = '';
+
+  for (let i = 0; i < length; i++) {
+    password += chars[bytes[i] % chars.length];
+  }
+
+  return password;
+  }
 
   private async getUserOrFail(email: string) {
     const user = await this.userRepository.findOne({
       where: { email: email },
-      select:['id','email','password','hashed_token','role']
+      select: ['id', 'email', 'password','first_name','hashed_token','role','new_password']
     })
     if (!user) {
       throw new UnauthorizedException(`user details does not match`)
@@ -162,4 +178,24 @@ export class AuthService {
     }
   }
   
+  async send_forget_email(forgetData:forgetDto) {
+    const user = await this.getUserOrFail(forgetData.email);
+    if (!user) {
+      throw new NotFoundException(`user with email ${forgetData.email} not found`);
+    }
+  
+
+    const tempPassword = this.generateSecurePassword();
+    const hashed = await bcrypt.hash(tempPassword, 10);
+    
+    // Save the updated user new password
+    user.new_password = hashed;
+    await this.userRepository.save(user);
+    
+    await this.mailServer.sendForgotPassword(user.email, tempPassword, user.first_name);
+    return {
+      status: 'success',
+      message:'Email sent for more info.'
+    }
+  }
 }
