@@ -57,7 +57,7 @@ export class UsersController {
   
   @Get(':id')
   @ApiBearerAuth('JWT-auth')
-  @Roles(RoleEnum.ADMIN, RoleEnum.ADMIN, RoleEnum.ORGANIZER)
+  @Roles(RoleEnum.ADMIN, RoleEnum.USER, RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Get users by id ' })
   @ApiQuery({ name: 'detailed', required: false, type: 'boolean', default: false, description: 'Get user details with more info' })
   findOne(
@@ -74,7 +74,7 @@ export class UsersController {
   
   @Patch(':id')
   @ApiBearerAuth('JWT-auth')
-  @Roles(RoleEnum.ADMIN, RoleEnum.ADMIN, RoleEnum.ORGANIZER)
+  @Roles(RoleEnum.ADMIN, RoleEnum.USER, RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Update users by id' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @UserD('sub') token_id: string,@UserD('role') role: RoleEnum,) {
     if (token_id !== id && role != RoleEnum.ADMIN) {
@@ -85,7 +85,7 @@ export class UsersController {
   
   @Delete(':id')
   @ApiBearerAuth('JWT-auth')
-  @Roles(RoleEnum.ADMIN,RoleEnum.ADMIN,RoleEnum.ORGANIZER)
+  @Roles(RoleEnum.ADMIN,RoleEnum.USER,RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Delete users by id' })
   remove(@Param('id') id: string, @UserD('sub') token_id: string, @UserD('role') role: RoleEnum,) {
     if (token_id !== id && role != RoleEnum.ADMIN) {

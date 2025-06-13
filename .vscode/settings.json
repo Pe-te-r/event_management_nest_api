@@ -11,7 +11,7 @@
     },
     {
       "previewLimit": 50,
-      "server": "192.168.0.101",
+      "server": "192.168.137.175",
       "port": 5432,
       "driver": "PostgreSQL",
       "name": "docker",
