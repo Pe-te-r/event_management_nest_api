@@ -66,6 +66,7 @@ export class UsersController {
     @UserD('role') role: RoleEnum,
     @Query('detailed') detailed?: string,
   ): Promise<ApiResponse<User | null>> {
+    console.log('one user');
     if (token_id !== id && role != RoleEnum.ADMIN) {
       throw new ForbiddenException('You are not allowed to access this resource that are not yours');
     }
@@ -77,7 +78,7 @@ export class UsersController {
   @Roles(RoleEnum.ADMIN, RoleEnum.USER, RoleEnum.ORGANIZER)
   @ApiOperation({ summary: 'Update users by id' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @UserD('sub') token_id: string,@UserD('role') role: RoleEnum,) {
-    if (token_id !== id && role != RoleEnum.ADMIN) {
+    if (token_id !== id && role !== RoleEnum.ADMIN) {
       throw new ForbiddenException('You are not allowed to access this resource that are not yours');
     }
     return this.usersService.update(id, updateUserDto);
