@@ -44,3 +44,4 @@ export class Event {
   @OneToMany(() => EventRegistration, (event_registration) => event_registration.registeredEvent,{cascade:true})
   registrations: EventRegistration[]
 }
+
