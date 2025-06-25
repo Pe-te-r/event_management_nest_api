@@ -28,7 +28,7 @@ export class UsersService {
     const newUser = this.userRepository.create(createUserDto)
     const savedUser = await this.userRepository.save(newUser)
     // send email
-    await this.mailService.sendUserRegistration(savedUser.first_name, savedUser.email);
+    // await this.mailService.sendUserRegistration(savedUser.first_name, savedUser.email);
 
     return {
       status: 'success',

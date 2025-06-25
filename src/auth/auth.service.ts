@@ -91,11 +91,10 @@ export class AuthService {
     if (!(await this.comparePasswords(data.password,user.password))) {
       throw new UnauthorizedException(`user details does not match`)
     }
-     console.log(user.role)
     const { accessToken, refreshToken } = await this.getTokens(user.id, user.email,user.role);
     const hashed_token =await this.hashData(refreshToken)
     await this.userRepository.update(user.id,{hashed_token})
-    return { accessToken, refreshToken: refreshToken };
+    return { user:{id:user.id,role:user.role,email:user.email,name:`${user.first_name}`}, accessToken, refreshToken: refreshToken };
   }
 
   async logout(id: string) {
