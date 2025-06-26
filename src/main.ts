@@ -42,7 +42,7 @@ This API provides comprehensive **event management** functionalities, including:
     .addTag('Events', 'Events endpoints managements')
     .addTag('Payments', 'Payments endpoints managements')
     .addTag('Registration', 'Event Registration endpoints managements')
-    .addServer('http://localhost:3000', 'localhost server')
+    .addServer('http://localhost:8000', 'localhost server')
     .addBearerAuth({
       type: 'http',
       scheme: 'bearer',

@@ -21,6 +21,7 @@ export class PaymentsService {
       payments = await this.paymentRepository
         .createQueryBuilder('payment')
         .leftJoinAndSelect('payment.whichEvent', 'event')
+        .leftJoinAndSelect('payment.registration', 'registration')
         .leftJoinAndSelect('payment.whoPaid', 'user')
         .select([
           'payment.payment_id',
@@ -28,11 +29,17 @@ export class PaymentsService {
           'payment.payment_method',
           'payment.payment_status',
 
-          // From related Event
-          'event.registration_id',
-          'event.payment_status',
-          'event.payment_amount',
-          'event.registration_date',
+          // From related events
+          'event.event_id',
+          'event.event_name',
+          'event.event_date',
+          'event.event_location',
+
+          // From related registration
+          'registration.registration_id',
+          'registration.payment_status',
+          'registration.payment_amount',
+          'registration.registration_date',
 
           // From related User
           'user.id',
@@ -43,7 +50,7 @@ export class PaymentsService {
     } else if (id && detailed) {
       payments = await this.paymentRepository
         .createQueryBuilder('payment')
-        .leftJoinAndSelect('payment.whichEvent', 'event')
+        .leftJoinAndSelect('payment.registration', 'registration')
         .leftJoinAndSelect('payment.whoPaid', 'user')
         .select([
           'payment.payment_id',
@@ -51,11 +58,11 @@ export class PaymentsService {
           'payment.payment_method',
           'payment.payment_status',
 
-          // From related Event
-          'event.registration_id',
-          'event.payment_status',
-          'event.payment_amount',
-          'event.registration_date',
+          // From related registration
+          'registration.registration_id',
+          'registration.payment_status',
+          'registration.payment_amount',
+          'registration.registration_date',
 
           // From related User
           'user.id',
@@ -69,6 +76,7 @@ export class PaymentsService {
         where:{payment_id:id},
         relations: {
           whichEvent: true,
+          registration:true,
           whoPaid: true,
         }
       })

@@ -2,7 +2,7 @@ import { RegistationStatus } from "src/common/types/enums";
 import { Event } from "src/events/entities/event.entity";
 import { Payment } from "src/payments/entities/payment.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class EventRegistration {
   @PrimaryGeneratedColumn('uuid')
@@ -25,7 +25,7 @@ export class EventRegistration {
   @ManyToOne(() => Event, (event) => event.registrations, { onDelete: 'CASCADE' })
   registeredEvent: Event;
 
-  // payment
-  @OneToMany(() => Payment, (payment) => payment.whichEvent, { onDelete: 'CASCADE' })
-  payments: Payment[]
+  @OneToMany(() => Payment, (payment) => payment.registration, { onDelete: 'CASCADE' })
+  payments: Payment[];
+  
 }

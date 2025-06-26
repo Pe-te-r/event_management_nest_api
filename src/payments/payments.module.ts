@@ -8,7 +8,7 @@ import { User } from 'src/users/entities/user.entity';
 import { EventRegistration } from 'src/event_registrations/entities/event_registration.entity';
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forFeature([Payment, User, EventRegistration])],
+  imports: [DatabaseModule, TypeOrmModule.forFeature([Payment, User, EventRegistration,Event])],
   controllers: [PaymentsController],
   providers: [PaymentsService],
 })

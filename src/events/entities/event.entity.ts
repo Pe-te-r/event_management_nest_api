@@ -1,5 +1,6 @@
 import { EventRegistration } from "src/event_registrations/entities/event_registration.entity";
 import { Feedback } from "src/feedback/entities/feedback.entity";
+import { Payment } from "src/payments/entities/payment.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -41,7 +42,12 @@ export class Event {
   feedbacks: Feedback[];
 
   // one event with multiple registration
-  @OneToMany(() => EventRegistration, (event_registration) => event_registration.registeredEvent,{cascade:true})
-  registrations: EventRegistration[]
+  @OneToMany(() => EventRegistration, (event_registration) => event_registration.registeredEvent, { cascade: true })
+  registrations: EventRegistration[];
+
+  @OneToMany(() => Payment, (payment) => payment.whichEvent)
+  payments: Payment[];
+  
+
 }
 
