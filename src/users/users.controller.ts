@@ -54,6 +54,21 @@ export class UsersController {
     return await this.usersService.findAll(Number(limit), param?.detailed==='true');
   }
   
+  @Get(':id/events')
+  @ApiBearerAuth('JWT-auth')
+  @Roles(RoleEnum.ADMIN, RoleEnum.USER, RoleEnum.ORGANIZER)
+  @ApiOperation({ summary: 'Get events by user id' })
+  findEvents(
+    @Param('id') id: string,
+    @UserD('sub') token_id: string,
+    @UserD('role') role: RoleEnum,
+  ) {
+    if (token_id !== id && role != RoleEnum.ADMIN) {
+      throw new ForbiddenException('You are not allowed to access this resource that are not yours');
+    }
+    return this.usersService.getEvents(id);
+  }
+
   
   @Get(':id')
   @ApiBearerAuth('JWT-auth')
@@ -66,7 +81,6 @@ export class UsersController {
     @UserD('role') role: RoleEnum,
     @Query('detailed') detailed?: string,
   ): Promise<ApiResponse<User | null>> {
-    console.log('one user');
     if (token_id !== id && role != RoleEnum.ADMIN) {
       throw new ForbiddenException('You are not allowed to access this resource that are not yours');
     }
@@ -94,5 +108,6 @@ export class UsersController {
     }
     return this.usersService.remove(id);
   }
+  
 
 }

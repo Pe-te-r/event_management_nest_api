@@ -7,11 +7,13 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/mailer/mailer.service';
+import { Event } from 'src/events/entities/event.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Event) private eventRepository: Repository<Event>,
     private readonly mailService: MailService
   ) { }
   private async hashData(password: string): Promise<string> {
@@ -161,7 +163,7 @@ export class UsersService {
     const foundUser = await this.userRepository.findOne(
       {
         where: { id: id },
-        select:['id','email','first_name','last_name','phone','role','createAt']
+        select: ['id', 'email', 'first_name', 'last_name', 'phone', 'role', 'createAt']
       }
     )
     if (!foundUser) {
@@ -197,6 +199,26 @@ export class UsersService {
   }
 
 
+  async getEvents(id: string) {
+    const foundUser = await this.userRepository.findOne({ where: { id: id } });
+    if (!foundUser) {
+      throw new NotFoundException(`User with id ${id} not found`)
+    }
+    const events = await this.eventRepository.find({
+      where: {
+        createdBy: { id }
+      },
+    })
+    if (!events) {
+      throw new NotFoundException('no events found')
+    }
+    console.log(events)
+    return {
+      status: 'success',
+      message: 'Events retrived success',
+      data:events
+    }    
+  }
 
   async remove(id: string) {
     const foundUser = await this.userRepository.findOne({ where: { id: id } });

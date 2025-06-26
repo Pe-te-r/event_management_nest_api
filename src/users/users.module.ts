@@ -5,9 +5,10 @@ import { DatabaseModule } from 'src/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { MailModule } from 'src/mailer/mailer.module';
+import { Event } from 'src/events/entities/event.entity';
 
 @Module({
-  imports: [DatabaseModule, TypeOrmModule.forFeature([User]), MailModule],
+  imports: [DatabaseModule, TypeOrmModule.forFeature([User,Event]), MailModule],
   controllers: [UsersController],
   providers: [UsersService],
 })
