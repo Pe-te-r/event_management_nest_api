@@ -19,6 +19,7 @@ import { RedisThrottlerStorage } from './auth/rate-limter/redis-storage';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MailModule } from './mailer/mailer.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 
 
@@ -73,6 +74,7 @@ import { MailModule } from './mailer/mailer.module';
     FeedbackModule,
     PaymentsModule,
     MailModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [
