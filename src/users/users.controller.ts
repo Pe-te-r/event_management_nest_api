@@ -69,6 +69,24 @@ export class UsersController {
     return this.usersService.getEvents(id);
   }
 
+
+
+  @Public()
+  @Get(':id/organizer')
+  // @ApiBearerAuth('JWT-auth')
+  // @Roles(RoleEnum.ADMIN, RoleEnum.USER, RoleEnum.ORGANIZER)
+  // @ApiOperation({ summary: 'Get events by user id' })
+  findOgranizerDashboard(
+    @Param('id') id: string,
+    // @UserD('sub') token_id: string,
+    // @UserD('role') role: RoleEnum,
+  ) {
+    // if (token_id !== id && role != RoleEnum.ADMIN) {
+    //   throw new ForbiddenException('You are not allowed to access this resource that are not yours');
+    // }
+    return this.usersService.getOrganizationDashboard(id);
+  }
+
   
   @Get(':id')
   @ApiBearerAuth('JWT-auth')

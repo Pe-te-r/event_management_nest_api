@@ -8,12 +8,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/mailer/mailer.service';
 import { Event } from 'src/events/entities/event.entity';
+import { EventRegistration } from 'src/event_registrations/entities/event_registration.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Event) private eventRepository: Repository<Event>,
+    @InjectRepository(EventRegistration) private registrationRepository: Repository<EventRegistration>,
     private readonly mailService: MailService
   ) { }
   private async hashData(password: string): Promise<string> {
@@ -216,8 +218,36 @@ export class UsersService {
     return {
       status: 'success',
       message: 'Events retrived success',
+      data: events
+    }
+  }
+
+  async getOrganizationDashboard(id: string) {
+    const foundUser = await this.userRepository.findOne({ where: { id: id } });
+    if (!foundUser) {
+      throw new NotFoundException(`User with id ${id} not found`)
+    }
+    const events = await this.eventRepository.find({
+      where: {
+        createdBy: { id }
+      },
+      relations:{registrations:true,payments:true}
+    })
+    if (!events) {
+      throw new NotFoundException('no events found')
+    }
+    console.log(events)
+    const json_data: [] = []
+
+    return {
+      status: 'success',
+      message: 'data retrived success',
       data:events
-    }    
+    }
+
+
+
+
   }
 
   async remove(id: string) {

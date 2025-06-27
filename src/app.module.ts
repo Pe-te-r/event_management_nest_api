@@ -32,22 +32,22 @@ import { DashboardModule } from './dashboard/dashboard.module';
       envFilePath: ['.env.development'],
     }),
     // register redis
-    CacheModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      isGlobal: true,
-      useFactory: (configService: ConfigService) => {
-        return {
-          ttl: 60000,
-          stores: [
-            new Keyv({
-              store: new CacheableMemory({ ttl: 30000, lruSize: 5000 }),
-            }),
-            createKeyv(configService.getOrThrow<string>('REDIS_URL')),
-          ],
-        };
-      },
-    }),
+    // CacheModule.registerAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   isGlobal: true,
+    //   useFactory: (configService: ConfigService) => {
+    //     return {
+    //       ttl: 60000,
+    //       stores: [
+    //         new Keyv({
+    //           store: new CacheableMemory({ ttl: 30000, lruSize: 5000 }),
+    //         }),
+    //         createKeyv(configService.getOrThrow<string>('REDIS_URL')),
+    //       ],
+    //     };
+    //   },
+    // }),
     // register rate limter
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
@@ -78,10 +78,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
   ],
   controllers: [],
   providers: [
-    {
-      provide: 'APP_INTERCEPTOR',
-      useClass: CacheInterceptor,
-    },
+    // {
+    //   provide: 'APP_INTERCEPTOR',
+    //   useClass: CacheInterceptor,
+    // },
     {
       provide: APP_GUARD,
       useClass: AtGuard,

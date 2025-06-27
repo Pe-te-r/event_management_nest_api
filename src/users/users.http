@@ -17,6 +17,9 @@ Content-Type: application/json
 
 ## for all users
 ###
+GET {{url}}/users/c34bc995-a1c0-4743-ade6-673a3b25a4ac/organizer
+
+####
 GET {{url}}/users
 Authorization: Bearer {{access_token}}
 
